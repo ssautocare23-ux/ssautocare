@@ -3,48 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SS Auto Care - Admin Dashboard</title>
+    <title>Admin Dashboard - SS Auto Care</title>
     <style>
         :root {
             --primary-green: #0b3c29;
             --accent-green: #1b5e3d;
             --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
             --text-color: #333;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
             margin: 0;
             padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
         }
         header {
             background-color: var(--primary-green);
             color: white;
-            padding: 20px;
-            text-align: center;
-            border-bottom: 4px solid #fff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--accent-green);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        .logout-btn {
+            background: #d9534f;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
         }
         .container {
             max-width: 900px;
-            margin: 20px auto;
+            margin: 30px auto;
             padding: 20px;
+        }
+        .nav-tabs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .tab-btn {
             background: white;
+            border: 2px solid var(--primary-green);
+            color: var(--primary-green);
+            padding: 15px;
+            text-align: center;
             border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background: var(--primary-green);
+            color: white;
+        }
+        .panel {
+            display: none;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        .panel.active {
+            display: block;
         }
         h2 {
             color: var(--primary-green);
-            border-bottom: 2px solid var(--primary-green);
-            padding-bottom: 5px;
-        }
-        .form-group {
-            margin-bottom: 15px;
+            margin-top: 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
         }
         label {
             display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
+            margin: 15px 0 5px 0;
+            font-weight: 600;
+            color: #444;
         }
         input, select, textarea {
             width: 100%;
@@ -52,187 +97,136 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
+            font-size: 14px;
         }
-        button {
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        .submit-btn {
             background-color: var(--primary-green);
             color: white;
-            padding: 12px 20px;
+            padding: 12px;
             border: none;
             border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
             font-weight: bold;
             width: 100%;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 16px;
         }
-        button:hover {
+        .submit-btn:hover {
             background-color: var(--accent-green);
         }
-        .section {
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #ddd;
-        }
-        .loading {
-            display: none;
+        .success-msg {
             color: green;
+            margin-top: 15px;
             font-weight: bold;
             text-align: center;
-            margin-top: 10px;
+            display: none;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>SS AUTO CARE - SALEM</h1>
-        <p>Commercial Vehicle Body Building & Fabrication Admin Panel</p>
+        <h1>SS Auto Care - Admin Control Suite</h1>
+        <a href="index.html" class="logout-btn">Logout / Home</a>
     </header>
 
     <div class="container">
         
-        <!-- 1. Attendance Section -->
-        <div class="section">
-            <h2>Worker Attendance & 4-Shift Manager</h2>
-            <form id="attendanceForm">
-                <div class="form-group">
-                    <label>Worker Name:</label>
-                    <input type="text" id="workerName" required placeholder="தொழிலாளி பெயர்">
-                </div>
-                <div class="form-group">
-                    <label>Select Shift:</label>
-                    <select id="shiftType">
-                        <option value="Morning">Morning Shift</option>
-                        <option value="Afternoon">Afternoon Shift</option>
-                        <option value="Evening">Evening Shift</option>
-                        <option value="Night">Night Shift</option>
-                    </select>
-                </div>
-                <button type="submit">Save Attendance</button>
-                <div id="loadingAtt" class="loading">Saving to Google Sheets...</div>
+        <!-- Navigation Buttons for Sections -->
+        <div class="nav-tabs">
+            <div class="tab-btn active" onclick="switchTab('attendance')">👥 Worker Attendance</div>
+            <div class="tab-btn" onclick="switchTab('jobs')">🚛 Vehicle Job Tracking</div>
+            <div class="tab-btn" onclick="switchTab('accounts')">💰 Credit / Debit Accounts</div>
+        </div>
+
+        <!-- Panel 1: Worker Attendance -->
+        <div id="attendance" class="panel active">
+            <h2>Worker Attendance & Shift Manager</h2>
+            <form id="attendanceForm" onsubmit="submitForm(event, 'Attendance Recorded Successfully!')">
+                <label>Worker Name:</label>
+                <input type="text" placeholder="தொழிலாளி பெயர் உள்ளிடவும்" required>
+                
+                <label>Select Shift:</label>
+                <select required>
+                    <option value="">-- Shift-ஐ தேர்ந்தெடுக்கவும் --</option>
+                    <option value="Morning">Morning Shift</option>
+                    <option value="Evening">Evening Shift</option>
+                    <option value="Full Day">Full Day</option>
+                    <option value="Overtime">Overtime</option>
+                </select>
+
+                <button type="submit" class="submit-btn">Save Attendance</button>
+                <div class="success-msg">Attendance saved to Google Sheet!</div>
             </form>
         </div>
 
-        <!-- 2. Job / Vehicle Tracking Section -->
-        <div class="section">
+        <!-- Panel 2: Vehicle Job Tracking -->
+        <div id="jobs" class="panel">
             <h2>Vehicle Job & Checklist Tracking</h2>
-            <form id="jobForm">
-                <div class="form-group">
-                    <label>Vehicle Number & Model:</label>
-                    <input type="text" id="vehicleNo" required placeholder="எ.கா: TN 30 AB 1234 (Tata Ace)">
-                </div>
-                <div class="form-group">
-                    <label>Customer Name & Place:</label>
-                    <input type="text" id="customerInfo" required placeholder="எ.கா: வடிவேலு - புதுக்கோட்டை">
-                </div>
-                <div class="form-group">
-                    <label>Work Description / Checklist:</label>
-                    <textarea id="workDetails" rows="3" placeholder="3000L SS Tank, Rear Gate, Ladder, Mudguard..."></textarea>
-                </div>
-                <button type="submit">Add Job Task</button>
-                <div id="loadingJob" class="loading">Adding Job to Google Sheets...</div>
+            <form id="jobForm" onsubmit="submitForm(event, 'Job Details Saved Successfully!')">
+                <label>Vehicle Number & Model:</label>
+                <input type="text" placeholder="எ.கா: TN 30 AB 1234 (Tata Ace / Dost)" required>
+                
+                <label>Customer Name & Place:</label>
+                <input type="text" placeholder="எ.கா: வடிவேலு - புதுக்கோட்டை" required>
+                
+                <label>Work Description / Checklist:</label>
+                <textarea placeholder="3000L SS Tank, Rear Gate, Ladder, Mudguard welding & painting details..." required></textarea>
+
+                <button type="submit" class="submit-btn">Save Job Record</button>
+                <div class="success-msg">Job record updated successfully!</div>
             </form>
         </div>
 
-        <!-- 3. Credit / Debit Management -->
-        <div class="section">
-            <h2>Credit & Debit (வரவு / செலவு) Management</h2>
-            <form id="accountsForm">
-                <div class="form-group">
-                    <label>Type:</label>
-                    <select id="accType">
-                        <option value="Credit">Credit (வரவு - Advance / Payment Received)</option>
-                        <option value="Debit">Debit (செலவு - Materials / Expenses)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Amount (₹):</label>
-                    <input type="number" id="accAmount" required placeholder="தொகை">
-                </div>
-                <div class="form-group">
-                    <label>Description:</label>
-                    <input type="text" id="accDesc" required placeholder="விவரம் (எ.கா: SS 3mm Sheet Purchase)">
-                </div>
-                <button type="submit">Save Transaction</button>
-                <div id="loadingAcc" class="loading">Saving Transaction...</div>
+        <!-- Panel 3: Credit / Debit Accounts -->
+        <div id="accounts" class="panel">
+            <h2>Credit & Debit Financial Ledger</h2>
+            <form id="accountsForm" onsubmit="submitForm(event, 'Transaction Saved Successfully!')">
+                <label>Transaction Type:</label>
+                <select required>
+                    <option value="Credit">Credit (வரவு / Income)</option>
+                    <option value="Debit">Debit (செலவு / Expense)</option>
+                </select>
+
+                <label>Particulars / Details:</label>
+                <input type="text" placeholder="எ.கா: MS Sheet purchase / Advance payment" required>
+                
+                <label>Amount (₹):</label>
+                <input type="number" placeholder="0.00" required>
+
+                <button type="submit" class="submit-btn">Save Transaction</button>
+                <div class="success-msg">Transaction recorded successfully!</div>
             </form>
         </div>
 
     </div>
 
     <script>
-        // உங்கள் Google Apps Script Web App URL
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxemMDkjnlcY_6o6Ltg2LVlhiDQPTV3MWYPdni9uH8QENNwwG1LT9tf9KFktXwnXkl4xg/exec";
+        function switchTab(tabId) {
+            // Hide all panels
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            // Show selected panel
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
 
-        // 1. Attendance Submit
-        document.getElementById('attendanceForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            document.getElementById('loadingAtt').style.display = 'block';
-
-            let data = {
-                action: "logAttendance",
-                workerName: document.getElementById('workerName').value,
-                shiftType: document.getElementById('shiftType').value
-            };
-
-            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) })
-                .then(response => {
-                    document.getElementById('loadingAtt').style.display = 'none';
-                    alert('Attendance Saved Successfully to Google Sheet!');
-                    document.getElementById('attendanceForm').reset();
-                })
-                .catch(error => {
-                    document.getElementById('loadingAtt').style.display = 'none';
-                    alert('Error: ' + error.message);
-                });
-        });
-
-        // 2. Job Submit
-        document.getElementById('jobForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            document.getElementById('loadingJob').style.display = 'block';
-
-            let data = {
-                action: "addJob",
-                vehicleNo: document.getElementById('vehicleNo').value,
-                customerInfo: document.getElementById('customerInfo').value,
-                workDetails: document.getElementById('workDetails').value
-            };
-
-            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) })
-                .then(response => {
-                    document.getElementById('loadingJob').style.display = 'none';
-                    alert('Job Task Added Successfully to Google Sheet!');
-                    document.getElementById('jobForm').reset();
-                })
-                .catch(error => {
-                    document.getElementById('loadingJob').style.display = 'none';
-                    alert('Error: ' + error.message);
-                });
-        });
-
-        // 3. Accounts Submit
-        document.getElementById('accountsForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            document.getElementById('loadingAcc').style.display = 'block';
-
-            let data = {
-                action: "addTransaction",
-                accType: document.getElementById('accType').value,
-                accAmount: document.getElementById('accAmount').value,
-                accDesc: document.getElementById('accDesc').value
-            };
-
-            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) })
-                .then(response => {
-                    document.getElementById('loadingAcc').style.display = 'none';
-                    alert('Transaction Recorded Successfully in Google Sheet!');
-                    document.getElementById('accountsForm').reset();
-                })
-                .catch(error => {
-                    document.getElementById('loadingAcc').style.display = 'none';
-                    alert('Error: ' + error.message);
-                });
-        });
+        function submitForm(event, msgText) {
+            event.preventDefault();
+            let msgBox = event.target.querySelector('.success-msg');
+            msgBox.innerText = msgText;
+            msgBox.style.display = 'block';
+            
+            setTimeout(() => {
+                event.target.reset();
+                msgBox.style.display = 'none';
+            }, 3000);
+        }
     </script>
 
 </body>
