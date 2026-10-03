@@ -3,85 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - SS Auto Care</title>
+    <title>SS Auto Care - Salem | Commercial Vehicle Body Building & Fabrication</title>
     <style>
+        :root {
+            --primary-green: #0b3c29;
+            --accent-green: #1b5e3d;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0b3c29;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
         }
-        .login-box {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            width: 320px;
-            text-align: center;
-        }
-        h2 {
-            color: #0b3c29;
-            margin-bottom: 20px;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            background-color: #0b3c29;
+        header {
+            background-color: var(--primary-green);
             color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 5px solid #1b5e3d;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+        header p {
+            margin: 10px 0 0 0;
+            font-size: 16px;
+            color: #d1e7dd;
+        }
+        .nav-bar {
+            background-color: #062419;
             padding: 10px;
-            border: none;
+            text-align: right;
+            padding-right: 30px;
+        }
+        .nav-bar a {
+            color: white;
+            text-decoration: none;
+            background: var(--accent-green);
+            padding: 8px 15px;
             border-radius: 4px;
             font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #1b5e3d;
-        }
-        .error {
-            color: red;
             font-size: 14px;
-            margin-top: 10px;
-            display: none;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: var(--primary-green);
+            border-bottom: 2px solid var(--primary-green);
+            padding-bottom: 8px;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .service-card {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 20px;
+            border-left: 5px solid var(--primary-green);
+        }
+        .service-card h3 {
+            margin-top: 0;
+            color: var(--primary-green);
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--primary-green);
+            color: white;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
 
-    <div class="login-box">
-        <h2>Admin Login</h2>
-        <form id="loginForm">
-            <input type="text" id="username" placeholder="Username" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <button type="submit">Login</button>
-            <div id="errorMsg" class="error">Invalid Username or Password!</div>
-        </form>
+    <div class="nav-bar">
+        <a href="login.html">🔒 Admin Login</a>
     </div>
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            let user = document.getElementById('username').value;
-            let pass = document.getElementById('password').value;
+    <header>
+        <h1>SS AUTO CARE - SALEM</h1>
+        <p>Commercial Vehicle Body Building, SS 304 Food-Grade Water Tanks & Custom Fabrication</p>
+    </header>
 
-            // Simple Password Check (Neenga thevaiyanatha maathikkalam)
-            if(user === "admin" && pass === "ssadmin123") {
-                window.location.href = "dashboard.html"; // Admin Dashboard-ku redirect aagum
-            } else {
-                document.getElementById('errorMsg').style.display = 'block';
-            }
-        });
-    </script>
+    <div class="container">
+        <h2>Our Specializations</h2>
+        <p>Swaminathapuram, Salem-il 30 aandugalukkum mela sirappana muriyil commercial vehicle body building, custom hydraulic tippers, matrum water tank fabrication seithu tharukirom.</p>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>SS 304 Water Tanks</h3>
+                <p>3mm thickness food-grade stainless steel water tanks, custom built for Ashok Leyland Dost, Tata Ace & multi-axle vehicles.</p>
+            </div>
+            <div class="service-card">
+                <h3>Custom Hydraulic Tippers</h3>
+                <p>Heavy-duty open bodies, tipper conversions, and structural metal fabrication with precise engineering.</p>
+            </div>
+            <div class="service-card">
+                <h3>Tinkering & Painting</h3>
+                <p>Professional spray painting, custom tape-stencil border styling, and complete vehicle denting & fabrication works.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 SS Auto Care, Swaminathapuram, Salem. All Rights Reserved.</p>
+    </footer>
 
 </body>
 </html>
