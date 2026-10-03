@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SS Auto Care - Admin Dashboard</title>
+    <style>
+        :root {
+            --primary-green: #0b3c29;
+            --accent-green: #1b5e3d;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 4px solid #fff;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: var(--primary-green);
+            border-bottom: 2px solid var(--primary-green);
+            padding-bottom: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+        }
+        button:hover {
+            background-color: var(--accent-green);
+        }
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .loading {
+            display: none;
+            color: green;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>SS AUTO CARE - SALEM</h1>
+        <p>Commercial Vehicle Body Building & Fabrication Admin Panel</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- 1. Attendance Section -->
+        <div class="section">
+            <h2>Worker Attendance & 4-Shift Manager</h2>
+            <form id="attendanceForm">
+                <div class="form-group">
+                    <label>Worker Name:</label>
+                    <input type="text" id="workerName" required placeholder="தொழிலாளி பெயர்">
+                </div>
+                <div class="form-group">
+                    <label>Select Shift:</label>
+                    <select id="shiftType">
+                        <option value="Morning">Morning Shift</option>
+                        <option value="Afternoon">Afternoon Shift</option>
+                        <option value="Evening">Evening Shift</option>
+                        <option value="Night">Night Shift</option>
+                    </select>
+                </div>
+                <button type="submit">Save Attendance</button>
+                <div id="loadingAtt" class="loading">Saving to Google Sheets...</div>
+            </form>
+        </div>
+
+        <!-- 2. Job / Vehicle Tracking Section -->
+        <div class="section">
+            <h2>Vehicle Job & Checklist Tracking</h2>
+            <form id="jobForm">
+                <div class="form-group">
+                    <label>Vehicle Number & Model:</label>
+                    <input type="text" id="vehicleNo" required placeholder="எ.கா: TN 30 AB 1234 (Tata Ace)">
+                </div>
+                <div class="form-group">
+                    <label>Customer Name & Place:</label>
+                    <input type="text" id="customerInfo" required placeholder="எ.கா: வடிவேலு - புதுக்கோட்டை">
+                </div>
+                <div class="form-group">
+                    <label>Work Description / Checklist:</label>
+                    <textarea id="workDetails" rows="3" placeholder="3000L SS Tank, Rear Gate, Ladder, Mudguard..."></textarea>
+                </div>
+                <button type="submit">Add Job Task</button>
+                <div id="loadingJob" class="loading">Adding Job to Google Sheets...</div>
+            </form>
+        </div>
+
+        <!-- 3. Credit / Debit Management -->
+        <div class="section">
+            <h2>Credit & Debit (வரவு / செலவு) Management</h2>
+            <form id="accountsForm">
+                <div class="form-group">
+                    <label>Type:</label>
+                    <select id="accType">
+                        <option value="Credit">Credit (வரவு - Advance / Payment Received)</option>
+                        <option value="Debit">Debit (செலவு - Materials / Expenses)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Amount (₹):</label>
+                    <input type="number" id="accAmount" required placeholder="தொகை">
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <input type="text" id="accDesc" required placeholder="விவரம் (எ.கா: SS 3mm Sheet Purchase)">
+                </div>
+                <button type="submit">Save Transaction</button>
+                <div id="loadingAcc" class="loading">Saving Transaction...</div>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // உங்கள் Google Apps Script Web App URL
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxemMDkjnlcY_6o6Ltg2LVlhiDQPTV3MWYPdni9uH8QENNwwG1LT9tf9KFktXwnXkl4xg/exec";
+
+        // 1. Attendance Submit
+        document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('loadingAtt').style.display = 'block';
+
+            let data = {
+                action: "logAttendance",
+                workerName: document.getElementById('workerName').value,
+                shiftType: document.getElementById('shiftType').value
+            };
+
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) })
+                .then(response => {
+                    document.getElementById('loadingAtt').style.display = 'none';
+                    alert('Attendance Saved Successfully to Google Sheet!');
+                    document.getElementById('attendanceForm').reset();
+                })
+                .catch(error => {
+                    document.getElementById('loadingAtt').style.display = 'none';
+                    alert('Error: ' + error.message);
+                });
+        });
+
+        // 2. Job Submit
+        document.getElementById('jobForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('loadingJob').style.display = 'block';
+
+            let data = {
+                action: "addJob",
+                vehicleNo: document.getElementById('vehicleNo').value,
+                customerInfo: document.getElementById('customerInfo').value,
+                workDetails: document.getElementById('workDetails').value
+            };
+
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) })
+                .then(response => {
+                    document.getElementById('loadingJob').style.display = 'none';
+                    alert('Job Task Added Successfully to Google Sheet!');
+                    document.getElementById('jobForm').reset();
+                })
+                .catch(error => {
+                    document.getElementById('loadingJob').style.display = 'none';
+                    alert('Error: ' + error.message);
+                });
+        });
+
+        // 3. Accounts Submit
+        document.getElementById('accountsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('loadingAcc').style.display = 'block';
+
+            let data = {
+                action: "addTransaction",
+                accType: document.getElementById('accType').value,
+                accAmount: document.getElementById('accAmount').value,
+                accDesc: document.getElementById('accDesc').value
+            };
+
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) })
+                .then(response => {
+                    document.getElementById('loadingAcc').style.display = 'none';
+                    alert('Transaction Recorded Successfully in Google Sheet!');
+                    document.getElementById('accountsForm').reset();
+                })
+                .catch(error => {
+                    document.getElementById('loadingAcc').style.display = 'none';
+                    alert('Error: ' + error.message);
+                });
+        });
+    </script>
+
+</body>
+</html>
