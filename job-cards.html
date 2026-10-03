@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heavy Fabrication Job Cards - SS Autocare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #1e2326; color: #ffffff; }
+        .glass-panel { background: rgba(42, 52, 57, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; }
+        .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.5rem; color: #9ca3af; transition: all 0.2s; }
+        .sidebar-link:hover { background: rgba(255, 255, 255, 0.05); color: white; }
+        .sidebar-link.active { background: rgba(255, 90, 0, 0.1); color: #ff5a00; border-right: 3px solid #ff5a00; }
+        
+        .input-dark { background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); color: white; border-radius: 0.5rem; padding: 0.75rem 1rem; outline: none; transition: all 0.2s; width: 100%; font-size: 0.9rem;}
+        .input-dark:focus { border-color: #ff5a00; box-shadow: 0 0 0 1px #ff5a00; }
+        
+        .input-transparent { background: transparent; border: none; border-bottom: 1px dashed rgba(255,255,255,0.3); color: white; width: 100%; outline: none; padding: 0.25rem 0; transition: border-color 0.2s; }
+        .input-transparent:focus { border-bottom-color: #ff5a00; }
+
+        .label-dark { display: block; text-transform: uppercase; font-size: 0.75rem; font-weight: 600; color: #9ca3af; margin-bottom: 0.5rem; letter-spacing: 0.05em; }
+        
+        .btn-primary { background-color: #ff5a00; color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition: all 0.2s; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .btn-primary:hover { background-color: #e04f00; box-shadow: 0 0 15px rgba(255,90,0,0.4); }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 500; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer;}
+        .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e2326; }
+        ::-webkit-scrollbar-thumb { background: #3F4A50; border-radius: 4px; }
+
+        @media print {
+            body { background: white; color: black; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            main { padding: 0 !important; margin: 0 !important; }
+            
+            #printView { display: block !important; padding: 1cm; }
+            
+            .print-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            .print-table th, .print-table td { border: 1px solid #000; padding: 12px; text-align: left; }
+            .print-table th { background-color: #f3f4f6; font-weight: bold; text-transform: uppercase; }
+            
+            .checkbox-box { width: 25px; height: 25px; border: 2px solid #000; display: inline-block; }
+        }
+        .print-only { display: none; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <aside class="w-64 flex-shrink-0 border-r border-white/10 bg-[#1e2326] flex flex-col no-print">
+        <div class="p-6 border-b border-white/10">
+            <h1 class="text-2xl font-bold tracking-wider uppercase text-white">
+                <span class="text-[#ff5a00]">SS</span> Autocare
+            </h1>
+        </div>
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+            <a href="index.html" class="sidebar-link">
+                <i data-lucide="layout-dashboard"></i> Dashboard
+            </a>
+            <a href="job-cards.html" class="sidebar-link active">
+                <i data-lucide="clipboard-list"></i> Job Cards
+            </a>
+            <a href="attendance-advances.html" class="sidebar-link">
+                <i data-lucide="users"></i> HR & Labor
+            </a>
+            <a href="contractor-ledger.html" class="sidebar-link">
+                <i data-lucide="hard-hat"></i> Contractors
+            </a>
+            <a href="purchase.html" class="sidebar-link">
+                <i data-lucide="shopping-cart"></i> Purchases
+            </a>
+            <a href="sales.html" class="sidebar-link">
+                <i data-lucide="receipt"></i> Sales Invoices
+            </a>
+            <a href="quotations.html" class="sidebar-link">
+                <i data-lucide="file-text"></i> Quotations
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-gradient-to-br from-[#1e2326] to-[#0f1113] p-8 relative">
+        
+        <!-- Standard UI (Hidden during print) -->
+        <div class="max-w-5xl mx-auto w-full space-y-8 no-print" id="uiArea">
+            
+            <header class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-white mb-2">Job Card Management</h2>
+                    <p class="text-gray-400">Create & Manage Heavy Fabrication Projects.</p>
+                </div>
+                <button onclick="resetForm()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i> New Job Card
+                </button>
+            </header>
+
+            <form id="jobCardForm" class="space-y-8">
+                <div class="glass-panel p-8">
+                    <h3 class="text-lg font-semibold text-[#ff5a00] mb-6 border-b border-white/10 pb-2 flex items-center gap-2">
+                        <i data-lucide="truck"></i> Vehicle & Fleet Information
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div>
+                            <label class="label-dark">Fleet Name *</label>
+                            <input type="text" id="fleet" class="input-dark" required>
+                        </div>
+                        <div>
+                            <label class="label-dark">Make & Model *</label>
+                            <input type="text" id="vehicle" class="input-dark" required>
+                        </div>
+                        <div>
+                            <label class="label-dark">Chassis Number *</label>
+                            <input type="text" id="chassis" class="input-dark font-mono text-[#007bff]" required>
+                        </div>
+                        <div>
+                            <label class="label-dark">Current Stage</label>
+                            <select id="stage" class="input-dark">
+                                <option>Pending</option>
+                                <option>Frame Stage</option>
+                                <option>Panel Stage</option>
+                                <option>Painting</option>
+                                <option>Delivered</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8">
+                    <div class="flex justify-between items-end border-b border-white/10 pb-2 mb-6">
+                        <h3 class="text-lg font-semibold text-[#007bff] flex items-center gap-2">
+                            <i data-lucide="check-square"></i> Worker Task Checklist
+                        </h3>
+                        <button type="button" onclick="addTaskRow()" class="text-[#007bff] text-sm font-bold flex items-center gap-1 hover:text-white transition">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Add Task
+                        </button>
+                    </div>
+                    
+                    <div id="taskContainer" class="space-y-4">
+                        <div class="flex gap-4 group task-row items-center">
+                            <i data-lucide="square" class="text-gray-600 w-5 h-5 flex-shrink-0"></i>
+                            <input type="text" class="input-transparent flex-1 task-input" placeholder="e.g. Weld Rear Bumper / Paint Cabin">
+                            <button type="button" onclick="this.parentElement.remove()" class="text-red-500 opacity-0 group-hover:opacity-100 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-4">
+                    <button type="button" id="saveBtn" onclick="saveJobCard()" class="btn-primary">
+                        <i data-lucide="save"></i> Save Job Card
+                    </button>
+                </div>
+            </form>
+
+            <!-- Saved Job Cards List -->
+            <div class="glass-panel p-8 mt-12 mb-20">
+                <h3 class="text-xl font-bold mb-6 border-b border-white/10 pb-2">Active Job Cards</h3>
+                <div class="space-y-4" id="savedJobsList">
+                    <!-- JS population -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Print View Container (Only visible during window.print()) -->
+        <div id="printView" class="print-only hidden w-full bg-white text-black min-h-screen">
+            <div class="text-center border-b-2 border-black pb-4 mb-6">
+                <h1 class="text-4xl font-bold uppercase tracking-widest mb-1">SS Autocare</h1>
+                <p class="text-lg font-semibold">Heavy Commercial Body Builders</p>
+                <p class="text-sm">15/1, Ravaneshvara Nagar, Near Uma Dall Mill, Salem - 636009</p>
+                <div class="mt-4 inline-block bg-black text-white px-6 py-2 text-xl font-bold uppercase">Official Job Card</div>
+            </div>
+
+            <div class="flex justify-between items-end mb-8 border border-black p-4 rounded-lg bg-gray-50">
+                <div>
+                    <p class="text-sm font-bold text-gray-600 uppercase mb-1">Customer / Fleet Name</p>
+                    <h2 class="text-2xl font-bold" id="printFleet">Fleet Name</h2>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-bold text-gray-600 uppercase mb-1">Vehicle Details</p>
+                    <p class="text-lg font-bold" id="printVehicle">Vehicle</p>
+                    <p class="text-md font-mono mt-1">Chassis: <span class="font-bold" id="printChassis">Chassis</span></p>
+                </div>
+            </div>
+
+            <h3 class="text-xl font-bold uppercase border-b border-black pb-2 mb-4">Worker Task Checklist</h3>
+            
+            <table class="print-table">
+                <thead>
+                    <tr>
+                        <th style="width: 80px; text-align: center;">Status</th>
+                        <th>Task Description</th>
+                        <th style="width: 150px;">Worker Sign</th>
+                    </tr>
+                </thead>
+                <tbody id="printTaskBody">
+                    <!-- JS populated -->
+                </tbody>
+            </table>
+            
+            <div class="mt-20 flex justify-between px-10">
+                <div class="text-center border-t border-black w-48 pt-2 font-bold">Supervisor Sign</div>
+                <div class="text-center border-t border-black w-48 pt-2 font-bold">Final Inspection</div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        if(!localStorage.getItem('erp_jobCards')) {
+            localStorage.setItem('erp_jobCards', '[]');
+        }
+
+        let editingJobId = null;
+
+        function resetForm() {
+            editingJobId = null;
+            document.getElementById('jobCardForm').reset();
+            
+            const container = document.getElementById('taskContainer');
+            container.innerHTML = `
+                <div class="flex gap-4 group task-row items-center">
+                    <i data-lucide="square" class="text-gray-600 w-5 h-5 flex-shrink-0"></i>
+                    <input type="text" class="input-transparent flex-1 task-input" placeholder="e.g. Weld Rear Bumper / Paint Cabin">
+                    <button type="button" onclick="this.parentElement.remove()" class="text-red-500 opacity-0 group-hover:opacity-100 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                </div>
+            `;
+            
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.innerHTML = '<i data-lucide="save"></i> Save Job Card';
+            saveBtn.className = "btn-primary";
+            saveBtn.onclick = saveJobCard;
+            lucide.createIcons();
+        }
+
+        function addTaskRow(val = '') {
+            const container = document.getElementById('taskContainer');
+            const row = document.createElement('div');
+            row.className = 'flex gap-4 group task-row items-center';
+            row.innerHTML = `
+                <i data-lucide="square" class="text-gray-600 w-5 h-5 flex-shrink-0"></i>
+                <input type="text" class="input-transparent flex-1 task-input" placeholder="e.g. Weld Rear Bumper / Paint Cabin" value="${val}">
+                <button type="button" onclick="this.parentElement.remove()" class="text-red-500 opacity-0 group-hover:opacity-100 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            `;
+            container.appendChild(row);
+            lucide.createIcons();
+        }
+
+        function loadJobs() {
+            let jobs = JSON.parse(localStorage.getItem('erp_jobCards') || '[]');
+            
+            // Backwards compatibility: give old jobs an ID
+            let needsSave = false;
+            jobs.forEach((job, index) => {
+                if(!job.id) {
+                    job.id = 'OLD_' + Date.now() + '_' + index;
+                    needsSave = true;
+                }
+            });
+            if(needsSave) localStorage.setItem('erp_jobCards', JSON.stringify(jobs));
+
+            const list = document.getElementById('savedJobsList');
+            list.innerHTML = '';
+            
+            if(jobs.length === 0) {
+                list.innerHTML = '<p class="text-gray-500 italic">No active job cards found.</p>';
+            }
+
+            jobs.forEach(job => {
+                let taskCount = job.checklist ? job.checklist.length : 0;
+                
+                list.innerHTML += `
+                    <div class="flex justify-between items-center bg-white/5 p-4 rounded-lg border border-white/10 hover:bg-white/10 transition">
+                        <div>
+                            <h4 class="font-bold text-lg text-white">${job.fleet}</h4>
+                            <p class="text-sm text-gray-400">${job.vehicle} | Chassis: <span class="text-[#007bff] font-mono">${job.chassis}</span></p>
+                            <div class="flex items-center gap-3 mt-2">
+                                <span class="text-xs text-[#ff5a00] uppercase tracking-wider font-semibold border border-[#ff5a00]/30 px-2 py-0.5 rounded">${job.stage}</span>
+                                <span class="text-xs text-gray-400 flex items-center gap-1"><i data-lucide="check-square" class="w-3 h-3"></i> ${taskCount} Tasks</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="editJob('${job.id}')" class="btn-secondary text-[#007bff] border-[#007bff]/50">
+                                <i data-lucide="edit" class="w-4 h-4"></i> Edit
+                            </button>
+                            <button onclick="printJob('${job.id}')" class="bg-white text-black px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-gray-200 transition">
+                                <i data-lucide="printer" class="w-4 h-4"></i> Print Card
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            lucide.createIcons();
+        }
+
+        function getFormData() {
+            const checklist = [];
+            document.querySelectorAll('.task-input').forEach(input => {
+                if(input.value.trim() !== '') checklist.push(input.value.trim());
+            });
+
+            return {
+                id: editingJobId || Date.now(),
+                date: new Date().toISOString().split('T')[0],
+                fleet: document.getElementById('fleet').value,
+                vehicle: document.getElementById('vehicle').value,
+                chassis: document.getElementById('chassis').value,
+                stage: document.getElementById('stage').value,
+                checklist: checklist
+            };
+        }
+
+        function saveJobCard() {
+            const data = getFormData();
+            if(!data.fleet || !data.vehicle || !data.chassis) return alert("Fill all required vehicle details.");
+
+            const jobs = JSON.parse(localStorage.getItem('erp_jobCards') || '[]');
+            jobs.unshift(data);
+            localStorage.setItem('erp_jobCards', JSON.stringify(jobs));
+            
+            resetForm();
+            loadJobs();
+            alert("Job Card created successfully!");
+        }
+
+        function editJob(id) {
+            const jobs = JSON.parse(localStorage.getItem('erp_jobCards') || '[]');
+            const job = jobs.find(j => String(j.id) === String(id));
+            if(!job) return;
+
+            editingJobId = job.id;
+            document.getElementById('fleet').value = job.fleet;
+            document.getElementById('vehicle').value = job.vehicle;
+            document.getElementById('chassis').value = job.chassis;
+            document.getElementById('stage').value = job.stage || 'Pending';
+
+            const container = document.getElementById('taskContainer');
+            container.innerHTML = '';
+            if(job.checklist && job.checklist.length > 0) {
+                job.checklist.forEach(task => addTaskRow(task));
+            } else {
+                addTaskRow('');
+            }
+
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.innerHTML = '<i data-lucide="refresh-cw"></i> Update Job Card';
+            saveBtn.className = "bg-blue-600 hover:bg-blue-700 text-white padding-btn rounded-lg font-bold transition flex items-center gap-2 px-6 py-3";
+            saveBtn.onclick = updateJobCard;
+            
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateJobCard() {
+            const data = getFormData();
+            if(!data.fleet || !data.vehicle || !data.chassis) return alert("Fill all required vehicle details.");
+
+            let jobs = JSON.parse(localStorage.getItem('erp_jobCards') || '[]');
+            const index = jobs.findIndex(j => String(j.id) === String(editingJobId));
+            if(index !== -1) {
+                jobs[index] = data;
+                localStorage.setItem('erp_jobCards', JSON.stringify(jobs));
+                resetForm();
+                loadJobs();
+                alert("Job Card updated successfully!");
+            }
+        }
+
+        function printJob(id) {
+            const jobs = JSON.parse(localStorage.getItem('erp_jobCards') || '[]');
+            const job = jobs.find(j => String(j.id) === String(id));
+            if(!job) return;
+
+            // Populate Print View
+            document.getElementById('printFleet').textContent = job.fleet;
+            document.getElementById('printVehicle').textContent = job.vehicle;
+            document.getElementById('printChassis').textContent = job.chassis;
+
+            const printTbody = document.getElementById('printTaskBody');
+            printTbody.innerHTML = '';
+
+            const tasks = (job.checklist && job.checklist.length > 0) ? job.checklist : ["Perform standard inspection", "Commence fabrication as per drawing"];
+            
+            tasks.forEach(task => {
+                printTbody.innerHTML += `
+                    <tr>
+                        <td style="text-align: center;"><div class="checkbox-box"></div></td>
+                        <td style="font-size: 1.1rem; font-weight: bold;">${task}</td>
+                        <td></td>
+                    </tr>
+                `;
+            });
+
+            // Trigger print
+            window.print();
+        }
+
+        // Initialize
+        resetForm();
+        loadJobs();
+    </script>
+</body>
+</html>

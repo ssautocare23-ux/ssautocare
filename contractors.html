@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contractors Ledger - SS Autocare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #1e2326; color: #ffffff; }
+        .glass-panel { background: rgba(42, 52, 57, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; }
+        .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.5rem; color: #9ca3af; transition: all 0.2s; }
+        .sidebar-link:hover { background: rgba(255, 255, 255, 0.05); color: white; }
+        .sidebar-link.active { background: rgba(255, 90, 0, 0.1); color: #ff5a00; border-right: 3px solid #ff5a00; }
+        
+        .input-dark { background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); color: white; border-radius: 0.5rem; padding: 0.5rem 0.75rem; outline: none; transition: all 0.2s; width: 100%; }
+        .input-dark:focus { border-color: #ff5a00; box-shadow: 0 0 0 1px #ff5a00; }
+        .btn-primary { background-color: #ff5a00; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 500; transition: all 0.2s; cursor: pointer; }
+        .btn-primary:hover { background-color: #e04f00; }
+        .btn-success { background-color: #10b981; color: white; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-weight: 500; font-size: 0.875rem; transition: all 0.2s;}
+        .btn-success:hover { background-color: #059669; }
+
+        .table-dark th { background: rgba(0, 0, 0, 0.2); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; color: #9ca3af; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 1rem; text-align: left;}
+        .table-dark td { border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 1rem; }
+        .table-dark tr:last-child td { border-bottom: none; }
+        
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e2326; }
+        ::-webkit-scrollbar-thumb { background: #3F4A50; border-radius: 4px; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <aside class="w-64 flex-shrink-0 border-r border-white/10 bg-[#1e2326] flex flex-col">
+        <div class="p-6 border-b border-white/10">
+            <h1 class="text-2xl font-bold tracking-wider uppercase text-white">
+                <span class="text-[#ff5a00]">SS</span> Autocare
+            </h1>
+        </div>
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+            <a href="index.html" class="sidebar-link">
+                <i data-lucide="layout-dashboard"></i> Dashboard
+            </a>
+            <a href="job-cards.html" class="sidebar-link">
+                <i data-lucide="clipboard-list"></i> Job Cards
+            </a>
+            <a href="attendance-advances.html" class="sidebar-link">
+                <i data-lucide="users"></i> HR & Labor
+            </a>
+            <a href="contractors.html" class="sidebar-link active">
+                <i data-lucide="hard-hat"></i> Contractors
+            </a>
+            <a href="quotations.html" class="sidebar-link">
+                <i data-lucide="file-text"></i> Quotations
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-gradient-to-br from-[#1e2326] to-[#0f1113]">
+        <header class="h-20 flex-shrink-0 px-8 flex items-center border-b border-white/5 backdrop-blur-sm sticky top-0 z-10">
+            <div>
+                <h2 class="text-xl font-semibold">Contractors Ledger</h2>
+                <p class="text-sm text-gray-400">Piece-rate Tracking & Settlements</p>
+            </div>
+        </header>
+
+        <div class="p-8 space-y-8">
+            
+            <!-- Assign New Contract Form -->
+            <div class="glass-panel p-6">
+                <h3 class="text-lg font-semibold flex items-center gap-2 mb-6">
+                    <i data-lucide="plus-circle" class="text-[#007bff]"></i> Assign New Contract
+                </h3>
+                <form id="newContractForm" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+                    <div>
+                        <label class="block text-xs uppercase text-gray-400 mb-1">Contractor Name</label>
+                        <input type="text" id="cName" class="input-dark" placeholder="e.g. Ramesh Painters">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase text-gray-400 mb-1">Category</label>
+                        <select id="cCategory" class="input-dark">
+                            <option>Painting</option>
+                            <option>Tinkering/Body</option>
+                            <option>Electrical</option>
+                            <option>Upholstery</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase text-gray-400 mb-1">Vehicle / Job Card</label>
+                        <input type="text" id="cJob" class="input-dark" placeholder="e.g. JC-2026-089">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase text-gray-400 mb-1">Total Amount (₹)</label>
+                        <input type="number" id="cAmount" class="input-dark" placeholder="e.g. 15000">
+                    </div>
+                    <div>
+                        <button type="button" onclick="addContract()" class="btn-primary w-full h-[42px]">Assign</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Ledger Table -->
+            <div class="glass-panel">
+                <div class="p-6 border-b border-white/5">
+                    <h3 class="text-lg font-semibold">Active Contracts</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full table-dark">
+                        <thead>
+                            <tr>
+                                <th>Contractor</th>
+                                <th>Category</th>
+                                <th>Assigned Job</th>
+                                <th class="text-right">Total Contract</th>
+                                <th class="text-right text-green-400">Advance Paid</th>
+                                <th class="text-right text-red-400">Balance Due</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contractorBody">
+                            <!-- Rows generated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center">
+        <div class="glass-panel p-8 w-full max-w-md bg-[#1e2326] border border-white/10 shadow-2xl">
+            <h3 class="text-xl font-bold mb-2">Process Payment</h3>
+            <p id="modalContractorName" class="text-gray-400 text-sm mb-6"></p>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Current Balance Due</label>
+                    <input type="text" id="modalBalance" class="input-dark font-mono text-red-400 font-bold" readonly>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Payment Amount (₹)</label>
+                    <input type="number" id="paymentAmount" class="input-dark" placeholder="Enter amount being paid">
+                </div>
+                <div class="flex gap-4 mt-6">
+                    <button onclick="closeModal()" class="flex-1 py-2 rounded-lg border border-white/20 text-white hover:bg-white/5 transition">Cancel</button>
+                    <button onclick="submitPayment()" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg font-medium transition shadow-lg shadow-green-500/20">Pay Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // State
+        let contracts = [
+            { id: 1, name: 'Ramesh Painters', category: 'Painting', job: 'JC-2026-088', total: 15000, paid: 5000 },
+            { id: 2, name: 'Siva Auto Elec', category: 'Electrical', job: 'JC-2026-089', total: 4500, paid: 0 }
+        ];
+
+        let currentPayId = null;
+
+        function renderTable() {
+            const tbody = document.getElementById('contractorBody');
+            tbody.innerHTML = '';
+            
+            contracts.forEach(c => {
+                const balance = c.total - c.paid;
+                const tr = document.createElement('tr');
+                tr.innerHTML = \`
+                    <td class="font-medium text-white">\${c.name}</td>
+                    <td><span class="text-xs px-2 py-1 bg-white/10 rounded-full text-gray-300">\${c.category}</span></td>
+                    <td class="font-mono text-sm text-[#007bff]">\${c.job}</td>
+                    <td class="text-right font-mono">₹\${c.total.toLocaleString('en-IN')}</td>
+                    <td class="text-right font-mono text-green-400">₹\${c.paid.toLocaleString('en-IN')}</td>
+                    <td class="text-right font-mono font-bold \${balance > 0 ? 'text-red-400' : 'text-gray-500'}">₹\${balance.toLocaleString('en-IN')}</td>
+                    <td class="text-center">
+                        <button onclick="openModal(\${c.id})" class="btn-success" \${balance <= 0 ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>Pay / Settle</button>
+                    </td>
+                \`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function addContract() {
+            const name = document.getElementById('cName').value;
+            const cat = document.getElementById('cCategory').value;
+            const job = document.getElementById('cJob').value;
+            const amt = parseFloat(document.getElementById('cAmount').value);
+            
+            if(!name || !job || isNaN(amt)) return alert("Please fill details correctly.");
+            
+            contracts.push({
+                id: Date.now(),
+                name: name,
+                category: cat,
+                job: job,
+                total: amt,
+                paid: 0
+            });
+            
+            document.getElementById('newContractForm').reset();
+            renderTable();
+        }
+
+        function openModal(id) {
+            const contract = contracts.find(c => c.id === id);
+            currentPayId = id;
+            document.getElementById('modalContractorName').textContent = \`\${contract.name} | Job: \${contract.job}\`;
+            document.getElementById('modalBalance').value = \`₹\${(contract.total - contract.paid).toLocaleString('en-IN')}\`;
+            document.getElementById('paymentAmount').value = '';
+            document.getElementById('paymentModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('paymentModal').classList.add('hidden');
+            currentPayId = null;
+        }
+
+        function submitPayment() {
+            const amt = parseFloat(document.getElementById('paymentAmount').value);
+            if(isNaN(amt) || amt <= 0) return alert("Enter valid amount");
+            
+            const contract = contracts.find(c => c.id === currentPayId);
+            const balance = contract.total - contract.paid;
+            
+            if(amt > balance) return alert("Payment exceeds balance due!");
+            
+            contract.paid += amt;
+            closeModal();
+            renderTable();
+        }
+
+        // Init
+        renderTable();
+    </script>
+</body>
+</html>

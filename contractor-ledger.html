@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contractors Ledger - SS Autocare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #1e2326; color: #ffffff; }
+        .glass-panel { background: rgba(42, 52, 57, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; }
+        .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.5rem; color: #9ca3af; transition: all 0.2s; }
+        .sidebar-link:hover { background: rgba(255, 255, 255, 0.05); color: white; }
+        .sidebar-link.active { background: rgba(255, 90, 0, 0.1); color: #ff5a00; border-right: 3px solid #ff5a00; }
+        
+        .input-dark { background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); color: white; border-radius: 0.5rem; padding: 0.5rem 0.75rem; outline: none; transition: all 0.2s; width: 100%; color-scheme: dark;}
+        .input-dark:focus { border-color: #ff5a00; box-shadow: 0 0 0 1px #ff5a00; }
+        
+        .btn-primary { background-color: #ff5a00; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 500; transition: all 0.2s; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;}
+        .btn-primary:hover { background-color: #e04f00; }
+        
+        .btn-secondary { background-color: transparent; border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 500; transition: all 0.2s; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;}
+        .btn-secondary:hover { background-color: rgba(255, 255, 255, 0.1); }
+        
+        .btn-danger { background-color: #ef4444; color: white; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.875rem; cursor: pointer; transition: all 0.2s; }
+        .btn-danger:hover { background-color: #dc2626; }
+        
+        .btn-success { background-color: #10b981; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 500; font-size: 0.875rem; transition: all 0.2s;}
+        .btn-success:hover { background-color: #059669; }
+
+        .table-dark th { background: rgba(0, 0, 0, 0.2); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; color: #9ca3af; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 1rem; text-align: left;}
+        .table-dark td { border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 1rem; }
+        .table-dark tr:last-child td { border-bottom: none; }
+        
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e2326; }
+        ::-webkit-scrollbar-thumb { background: #3F4A50; border-radius: 4px; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <aside class="w-64 flex-shrink-0 border-r border-white/10 bg-[#1e2326] flex flex-col">
+        <div class="p-6 border-b border-white/10">
+            <h1 class="text-2xl font-bold tracking-wider uppercase text-white">
+                <span class="text-[#ff5a00]">SS</span> Autocare
+            </h1>
+        </div>
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+            <a href="index.html" class="sidebar-link">
+                <i data-lucide="layout-dashboard"></i> Dashboard
+            </a>
+            <a href="job-cards.html" class="sidebar-link">
+                <i data-lucide="clipboard-list"></i> Job Cards
+            </a>
+            <a href="attendance-advances.html" class="sidebar-link">
+                <i data-lucide="users"></i> HR & Labor
+            </a>
+            <a href="contractor-ledger.html" class="sidebar-link active">
+                <i data-lucide="hard-hat"></i> Contractors
+            </a>
+            <a href="purchase.html" class="sidebar-link">
+                <i data-lucide="shopping-cart"></i> Purchases
+            </a>
+            <a href="sales.html" class="sidebar-link">
+                <i data-lucide="receipt"></i> Sales Invoices
+            </a>
+            <a href="quotations.html" class="sidebar-link">
+                <i data-lucide="file-text"></i> Quotations
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-gradient-to-br from-[#1e2326] to-[#0f1113]">
+        <header class="h-20 flex-shrink-0 px-8 flex items-center justify-between border-b border-white/5 backdrop-blur-sm sticky top-0 z-10">
+            <div>
+                <h2 class="text-xl font-semibold">Contractors Ledger</h2>
+                <p class="text-sm text-gray-400">Professional CR/DR Account Tracking</p>
+            </div>
+            <div class="flex gap-4">
+                <button class="btn-success text-white border-green-500" onclick="exportContractorLedger()">
+                    <i data-lucide="download" class="w-4 h-4"></i> Export Excel
+                </button>
+                <button class="btn-secondary text-[#007bff] border-[#007bff]" onclick="document.getElementById('contractorModal').classList.remove('hidden')">
+                    <i data-lucide="user-cog" class="w-4 h-4"></i> Manage Contractors
+                </button>
+            </div>
+        </header>
+
+        <div class="p-8 space-y-8 max-w-7xl mx-auto w-full">
+            
+            <!-- Ledger Selection -->
+            <div class="glass-panel p-6 flex flex-col md:flex-row gap-4 justify-between items-center bg-[#ff5a00]/5 border-[#ff5a00]/30">
+                <div class="flex items-center gap-4 w-full md:w-auto">
+                    <i data-lucide="book-open" class="text-[#ff5a00] w-8 h-8 hidden md:block"></i>
+                    <div class="flex-1 md:w-80">
+                        <label class="block text-sm text-gray-400 mb-1">Select Contractor Account to View:</label>
+                        <select id="mainContractorSelect" class="input-dark w-full" onchange="loadLedger()">
+                            <option value="">-- Choose Contractor --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm text-gray-400 uppercase tracking-wider">Current Balance</p>
+                    <p class="text-3xl font-bold font-mono" id="mainBalanceDisplay">₹0</p>
+                </div>
+            </div>
+
+            <!-- Transaction Forms (Hidden if no contractor selected) -->
+            <div id="transactionArea" class="grid grid-cols-1 lg:grid-cols-2 gap-8 hidden">
+                
+                <!-- Credit (Work Details) -->
+                <div class="glass-panel p-6 border-t-4 border-t-[#007bff]">
+                    <h3 class="text-lg font-semibold flex items-center gap-2 mb-6 text-[#007bff]">
+                        <i data-lucide="plus-circle"></i> Add Work Detail (Credit / CR)
+                    </h3>
+                    <form class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Date</label>
+                                <input type="date" id="crDate" class="input-dark">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Amount (₹)</label>
+                                <input type="number" id="crAmount" class="input-dark" placeholder="e.g. 15000">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Particulars / Job Detail</label>
+                            <input type="text" id="crDetail" class="input-dark" placeholder="e.g. Painting full body TN 30 AA 1111">
+                        </div>
+                        <button type="button" onclick="addTransaction('cr')" class="btn-secondary w-full border-[#007bff] text-[#007bff] mt-4">Credit Account</button>
+                    </form>
+                </div>
+
+                <!-- Debit (Payment) -->
+                <div class="glass-panel p-6 border-t-4 border-t-green-500">
+                    <h3 class="text-lg font-semibold flex items-center gap-2 mb-6 text-green-400">
+                        <i data-lucide="wallet"></i> Issue Payment (Debit / DR)
+                    </h3>
+                    <form class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Date</label>
+                                <input type="date" id="drDate" class="input-dark">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Amount Paid (₹)</label>
+                                <input type="number" id="drAmount" class="input-dark" placeholder="e.g. 5000">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Payment Reference</label>
+                            <input type="text" id="drDetail" class="input-dark" placeholder="e.g. Cash Advance / GPay Transfer">
+                        </div>
+                        <button type="button" onclick="addTransaction('dr')" class="btn-secondary w-full border-green-500 text-green-400 mt-4">Debit Account</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Ledger Statement Table -->
+            <div id="ledgerTableArea" class="glass-panel hidden">
+                <div class="p-6 border-b border-white/5 flex justify-between items-center">
+                    <h3 class="text-lg font-semibold">Account Statement</h3>
+                    <button class="btn-secondary text-xs py-1" onclick="window.print()">
+                        <i data-lucide="printer" class="w-4 h-4"></i> Print Statement
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full table-dark">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Particulars</th>
+                                <th class="text-right text-[#007bff]">Credit (₹)</th>
+                                <th class="text-right text-green-400">Debit (₹)</th>
+                                <th class="text-right text-white">Balance (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledgerBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Placeholder when no contractor selected -->
+            <div id="emptyState" class="text-center py-20 text-gray-500">
+                <i data-lucide="book-dashed" class="w-16 h-16 mx-auto mb-4 opacity-50"></i>
+                <p class="text-lg">Please select a contractor to view their ledger.</p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Contractor Management Modal -->
+    <div id="contractorModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center">
+        <div class="glass-panel p-8 w-full max-w-2xl bg-[#1e2326] border border-white/10 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold flex items-center gap-2 text-white">
+                    <i data-lucide="hard-hat" class="text-[#007bff]"></i> Contractor Database
+                </h3>
+                <button onclick="document.getElementById('contractorModal').classList.add('hidden')" class="text-gray-400 hover:text-white">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            
+            <!-- Add Form -->
+            <div class="bg-white/5 p-4 rounded-lg mb-6 border border-white/10">
+                <h4 class="text-sm font-semibold text-gray-300 mb-3 uppercase tracking-wider">Add New Contractor</h4>
+                <div class="grid grid-cols-2 gap-4 items-end">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Contractor / Company Name</label>
+                        <input type="text" id="newCName" class="input-dark text-sm" placeholder="e.g. Ramesh Traders">
+                    </div>
+                    <div class="flex gap-2 items-end">
+                        <div class="flex-1">
+                            <label class="block text-xs text-gray-400 mb-1">Category / Role</label>
+                            <input type="text" id="newCCategory" class="input-dark text-sm" placeholder="e.g. Painting">
+                        </div>
+                        <button onclick="addContractor()" class="btn-primary h-[38px]"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- List -->
+            <div class="overflow-y-auto flex-1">
+                <table class="w-full table-dark">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contractorListBody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Styles -->
+    <style>
+        @media print {
+            body { background-color: white; color: black; }
+            aside, header, #transactionArea, #emptyState, .glass-panel:first-child, .btn-secondary { display: none !important; }
+            .glass-panel { border: none !important; background: transparent !important; box-shadow: none !important; }
+            .table-dark th { background: #f3f4f6; color: black; border-bottom: 2px solid #000; }
+            .table-dark td { border-bottom: 1px solid #e5e7eb; color: black; }
+            #ledgerTableArea { display: block !important; }
+        }
+    </style>
+
+    <script>
+        lucide.createIcons();
+
+        // Data Initialization
+        if(!localStorage.getItem('erp_contractor_list')) {
+            localStorage.setItem('erp_contractor_list', '[]');
+        }
+        if(!localStorage.getItem('erp_contractor_ledger')) {
+            localStorage.setItem('erp_contractor_ledger', '[]');
+        }
+
+        const todayDate = new Date().toISOString().split('T')[0];
+        document.getElementById('crDate').value = todayDate;
+        document.getElementById('drDate').value = todayDate;
+
+        let contractors = [];
+        let ledger = [];
+
+        function loadData() {
+            contractors = JSON.parse(localStorage.getItem('erp_contractor_list'));
+            ledger = JSON.parse(localStorage.getItem('erp_contractor_ledger'));
+
+            // Populate Modal List
+            const listBody = document.getElementById('contractorListBody');
+            listBody.innerHTML = '';
+            contractors.forEach(c => {
+                listBody.innerHTML += `
+                    <tr>
+                        <td class="font-medium text-white">${c.name}</td>
+                        <td class="text-gray-400">${c.category}</td>
+                        <td class="text-right">
+                            <button onclick="deleteContractor('${c.id}')" class="btn-danger p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            lucide.createIcons();
+
+            // Populate Dropdown
+            const select = document.getElementById('mainContractorSelect');
+            const currentSelection = select.value;
+            select.innerHTML = '<option value="">-- Choose Contractor --</option>';
+            contractors.forEach(c => {
+                select.innerHTML += `<option value="${c.id}">${c.name} (${c.category})</option>`;
+            });
+            select.value = currentSelection;
+            
+            loadLedger();
+        }
+
+        function addContractor() {
+            const name = document.getElementById('newCName').value;
+            const category = document.getElementById('newCCategory').value;
+            if(!name || !category) return alert("Fill all fields");
+
+            contractors.push({ id: 'C' + Date.now(), name, category });
+            localStorage.setItem('erp_contractor_list', JSON.stringify(contractors));
+            
+            document.getElementById('newCName').value = '';
+            document.getElementById('newCCategory').value = '';
+            loadData();
+        }
+
+        function deleteContractor(id) {
+            if(confirm("Delete this contractor? Past ledger entries will remain saved but they won't appear in dropdowns.")) {
+                contractors = contractors.filter(c => c.id !== id);
+                localStorage.setItem('erp_contractor_list', JSON.stringify(contractors));
+                loadData();
+            }
+        }
+
+        function loadLedger() {
+            const cid = document.getElementById('mainContractorSelect').value;
+            
+            if(!cid) {
+                document.getElementById('transactionArea').classList.add('hidden');
+                document.getElementById('ledgerTableArea').classList.add('hidden');
+                document.getElementById('emptyState').classList.remove('hidden');
+                document.getElementById('mainBalanceDisplay').textContent = "₹0";
+                document.getElementById('mainBalanceDisplay').className = "text-3xl font-bold font-mono text-gray-500";
+                return;
+            }
+
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('transactionArea').classList.remove('hidden');
+            document.getElementById('ledgerTableArea').classList.remove('hidden');
+
+            const tbody = document.getElementById('ledgerBody');
+            tbody.innerHTML = '';
+            
+            // Filter ledger for this contractor and sort chronologically
+            let cLedger = ledger.filter(l => l.contractorId === cid);
+            cLedger.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            let balance = 0; // CR adds to balance, DR subtracts from balance. Positive balance means company owes contractor.
+
+            if(cLedger.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-6 text-gray-500">No transactions yet.</td></tr>';
+            } else {
+                cLedger.forEach(t => {
+                    let crStr = '-';
+                    let drStr = '-';
+                    if(t.type === 'cr') {
+                        crStr = `₹${t.amount}`;
+                        balance += t.amount;
+                    } else {
+                        drStr = `₹${t.amount}`;
+                        balance -= t.amount;
+                    }
+
+                    // For display, positive balance = Company Payable. Negative balance = Advance Excess.
+                    let balClass = "text-white";
+                    let balText = `₹${Math.abs(balance)}`;
+                    if(balance > 0) balText += " (Cr)";
+                    if(balance < 0) { balText += " (Dr)"; balClass = "text-red-400"; }
+
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-white/5">
+                            <td class="text-gray-400 whitespace-nowrap">${t.date}</td>
+                            <td class="font-medium">${t.detail}</td>
+                            <td class="text-right text-[#007bff] font-mono">${crStr}</td>
+                            <td class="text-right text-green-400 font-mono">${drStr}</td>
+                            <td class="text-right font-mono font-bold ${balClass}">${balText}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            // Update Header Balance
+            let mainBalText = `₹${Math.abs(balance)}`;
+            let mainBalClass = "text-3xl font-bold font-mono ";
+            if(balance > 0) { mainBalText += " (To Pay)"; mainBalClass += "text-white"; }
+            else if (balance < 0) { mainBalText += " (Adv Excess)"; mainBalClass += "text-red-400"; }
+            else { mainBalClass += "text-gray-500"; }
+            
+            document.getElementById('mainBalanceDisplay').textContent = mainBalText;
+            document.getElementById('mainBalanceDisplay').className = mainBalClass;
+        }
+
+        function addTransaction(type) {
+            const cid = document.getElementById('mainContractorSelect').value;
+            if(!cid) return alert("Select a contractor first.");
+
+            const date = document.getElementById(`${type}Date`).value;
+            const amount = parseFloat(document.getElementById(`${type}Amount`).value);
+            const detail = document.getElementById(`${type}Detail`).value;
+
+            if(!date || isNaN(amount) || amount <= 0 || !detail) return alert("Fill all details correctly.");
+
+            ledger.push({
+                id: 'L' + Date.now(),
+                contractorId: cid,
+                date: date,
+                type: type, // 'cr' or 'dr'
+                detail: detail,
+                amount: amount
+            });
+
+            localStorage.setItem('erp_contractor_ledger', JSON.stringify(ledger));
+            
+            document.getElementById(`${type}Amount`).value = '';
+            document.getElementById(`${type}Detail`).value = '';
+            
+            loadData();
+        }
+
+        async function exportContractorLedger() {
+            try {
+                const cl = JSON.parse(localStorage.getItem('erp_contractor_list') || '[]');
+                const cLedgerData = JSON.parse(localStorage.getItem('erp_contractor_ledger') || '[]');
+                
+                if(cl.length === 0 && cLedgerData.length === 0) return alert("No contractor data to export.");
+
+                const formattedCLedger = cLedgerData.map(l => {
+                    const contractor = cl.find(c => c.id === l.contractorId);
+                    return {
+                        Date: l.date,
+                        Contractor: contractor ? contractor.name : l.contractorId,
+                        Category: contractor ? contractor.category : '-',
+                        Type: l.type.toUpperCase(),
+                        Detail: l.detail,
+                        Amount: l.amount
+                    };
+                });
+
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(cl), "Contractors List");
+                XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(formattedCLedger), "Contractor Ledger");
+
+                if(window.showSaveFilePicker) {
+                    const handle = await window.showSaveFilePicker({
+                        suggestedName: 'Contractor_Ledger_Export.xlsx',
+                        types: [{ description: 'Excel Workbook', accept: {'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx']} }],
+                    });
+                    const writable = await handle.createWritable();
+                    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+                    await writable.write(wbout);
+                    await writable.close();
+                    alert("Contractor Ledger successfully exported!");
+                } else {
+                    XLSX.writeFile(wb, "Contractor_Ledger_Export.xlsx");
+                }
+            } catch(e) {
+                if(e.name !== 'AbortError') alert("Export failed: " + e.message);
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

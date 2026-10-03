@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotations - SS Autocare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #1e2326; color: #ffffff; }
+        .glass-panel { background: rgba(42, 52, 57, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; }
+        .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.5rem; color: #9ca3af; transition: all 0.2s; }
+        .sidebar-link:hover { background: rgba(255, 255, 255, 0.05); color: white; }
+        .sidebar-link.active { background: rgba(255, 90, 0, 0.1); color: #ff5a00; border-right: 3px solid #ff5a00; }
+        
+        .input-transparent { background: transparent; border: none; border-bottom: 1px dashed rgba(255,255,255,0.3); color: white; width: 100%; outline: none; padding: 0.25rem 0; transition: border-color 0.2s; }
+        .input-transparent:focus { border-bottom-color: #ff5a00; }
+        
+        .btn-primary { background-color: #ff5a00; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 500; transition: all 0.2s; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .btn-primary:hover { background-color: #e04f00; }
+        
+        @media print {
+            body { background: white; color: black; }
+            aside, header, .no-print, #historySection { display: none !important; }
+            main { padding: 0 !important; margin: 0 !important; background: white; }
+            .glass-panel { background: white; border: none; border-radius: 0; box-shadow: none; filter: none; }
+            .print-container { width: 100%; max-width: 100%; padding: 2cm; margin: 0; }
+            .input-transparent { border-bottom: none; color: black; }
+            .text-white { color: black !important; }
+            .text-gray-400 { color: #4a5568 !important; }
+            .border-white\/10 { border-color: #e2e8f0 !important; }
+            .bg-\[\#1e2326\] { background: transparent !important; }
+            table th { background: #f7fafc !important; color: black !important; border-bottom: 2px solid #cbd5e0 !important;}
+            table td { border-bottom: 1px solid #e2e8f0 !important; color: black !important; }
+        }
+        
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e2326; }
+        ::-webkit-scrollbar-thumb { background: #3F4A50; border-radius: 4px; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <aside class="w-64 flex-shrink-0 border-r border-white/10 bg-[#1e2326] flex flex-col no-print">
+        <div class="p-6 border-b border-white/10">
+            <h1 class="text-2xl font-bold tracking-wider uppercase text-white">
+                <span class="text-[#ff5a00]">SS</span> Autocare
+            </h1>
+        </div>
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+            <a href="index.html" class="sidebar-link">
+                <i data-lucide="layout-dashboard"></i> Dashboard
+            </a>
+            <a href="job-cards.html" class="sidebar-link">
+                <i data-lucide="clipboard-list"></i> Job Cards
+            </a>
+            <a href="attendance-advances.html" class="sidebar-link">
+                <i data-lucide="users"></i> HR & Labor
+            </a>
+            <a href="contractor-ledger.html" class="sidebar-link">
+                <i data-lucide="hard-hat"></i> Contractors
+            </a>
+            <a href="purchase.html" class="sidebar-link">
+                <i data-lucide="shopping-cart"></i> Purchases
+            </a>
+            <a href="sales.html" class="sidebar-link">
+                <i data-lucide="receipt"></i> Sales Invoices
+            </a>
+            <a href="quotations.html" class="sidebar-link active">
+                <i data-lucide="file-text"></i> Quotations
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto bg-gradient-to-br from-[#1e2326] to-[#0f1113] p-8 flex flex-col items-center">
+        
+        <!-- Top Action Buttons -->
+        <div class="w-full max-w-4xl flex justify-between items-end mb-4 no-print">
+            <div class="flex gap-2">
+                <button onclick="resetForm()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i> New Quote
+                </button>
+                <button onclick="convertToJobCard()" class="bg-[#007bff] hover:bg-[#0056b3] text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition shadow-lg shadow-[#007bff]/20">
+                    <i data-lucide="arrow-right-circle" class="w-4 h-4"></i> Convert to Job Card
+                </button>
+            </div>
+            <div class="flex gap-2">
+                <button id="saveBtn" onclick="saveQuotation()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2 transition shadow-lg shadow-green-600/20">
+                    <i data-lucide="save" class="w-4 h-4"></i> Save Quote
+                </button>
+                <button onclick="window.print()" class="bg-[#ff5a00] hover:bg-[#e04f00] text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2 transition shadow-lg shadow-[#ff5a00]/20">
+                    <i data-lucide="printer" class="w-4 h-4"></i> Print Invoice / Quote
+                </button>
+            </div>
+        </div>
+
+        <div class="w-full max-w-4xl print-container">
+            <div class="glass-panel p-10 print:p-0">
+                <!-- Header -->
+                <div class="flex justify-between items-start border-b border-white/10 pb-8 mb-8">
+                    <div>
+                        <h1 class="text-3xl font-bold uppercase tracking-widest"><span class="text-[#ff5a00] print:text-black">SS</span> Autocare</h1>
+                        <p class="text-sm text-gray-400 mt-2">Heavy Commercial Body Builders</p>
+                        <p class="text-sm text-gray-400">15/1, Ravaneshvara Nagar, Near Uma Dall Mill</p>
+                        <p class="text-sm text-gray-400">Pallappatti, Salem - 636009</p>
+                        <p class="text-sm text-gray-400 mt-1">Mobile: 8838103141 | GSTIN: 33AAAAA0000A1Z5</p>
+                    </div>
+                    <div class="text-right">
+                        <h2 class="text-2xl font-semibold text-[#007bff] print:text-black mb-4 uppercase tracking-widest">Quotation</h2>
+                        <div class="flex items-center justify-end gap-2 text-sm mb-1">
+                            <span class="text-gray-400">Date:</span>
+                            <input type="text" class="input-transparent w-32 text-right" id="quoteDate">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Client Info -->
+                <div class="grid grid-cols-2 gap-8 mb-8">
+                    <div>
+                        <h3 class="text-xs font-bold uppercase text-gray-500 mb-2">Quoted To:</h3>
+                        <input type="text" id="qClient" class="input-transparent text-lg font-medium mb-1" placeholder="Client / Fleet Name">
+                        <input type="text" id="qContact" class="input-transparent mb-1" placeholder="Address / Contact">
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold uppercase text-gray-500 mb-2">Vehicle Details:</h3>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-sm text-gray-400 w-24">Model:</span>
+                            <input type="text" id="qVehicle" class="input-transparent" placeholder="e.g. Tata Signa 2825.K">
+                        </div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-sm text-gray-400 w-24">Chassis No:</span>
+                            <input type="text" id="qChassis" class="input-transparent" placeholder="e.g. MAT45892010">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Line Items (Description Only) -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-end border-b-2 border-white/10 pb-3 mb-2">
+                        <h3 class="text-sm font-bold text-gray-400 uppercase">Work Description</h3>
+                        <button onclick="addDescRow()" class="no-print text-[#007bff] text-xs font-bold flex items-center gap-1 hover:text-white transition">
+                            <i data-lucide="plus" class="w-3 h-3"></i> Add Line
+                        </button>
+                    </div>
+                    <div id="descContainer" class="space-y-4">
+                        <div class="flex gap-2 group desc-row">
+                            <span class="text-gray-500 mt-1 flex-shrink-0 w-6">1.</span>
+                            <input type="text" class="input-transparent flex-1 desc-input" placeholder="Enter work description here...">
+                            <button onclick="removeDescRow(this)" class="no-print text-red-500 opacity-0 group-hover:opacity-100 transition"><i data-lucide="x" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Totals -->
+                <div class="flex justify-end border-t border-white/10 pt-6">
+                    <div class="w-72 space-y-3">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-400">Total Base Amount (₹):</span>
+                            <input type="number" id="baseAmount" class="input-transparent text-right w-32 font-mono text-white text-lg font-bold" value="0" oninput="calcTotal()" placeholder="0">
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-400">GST (18%):</span>
+                            <span class="font-mono text-white" id="gst">₹0</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-bold border-t border-white/10 pt-3 text-[#ff5a00] print:text-black">
+                            <span>Grand Total:</span>
+                            <span class="font-mono" id="grandTotal">₹0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Footer Note -->
+                <div class="mt-16 text-xs text-gray-500 print:text-gray-800 text-center border-t border-white/10 pt-4">
+                    <p>Thank you for your business! This quotation is valid for 30 days from the date of issue.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Section -->
+        <div id="historySection" class="w-full max-w-4xl mt-12 mb-20 no-print">
+            <h3 class="text-xl font-bold text-white mb-6 border-b border-white/10 pb-2 flex items-center gap-2">
+                <i data-lucide="history" class="text-[#007bff]"></i> Saved Quotations History
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="quotesList">
+                <!-- JS populated -->
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // Initialization
+        if(!localStorage.getItem('erp_quotations')) {
+            localStorage.setItem('erp_quotations', '[]');
+        }
+
+        let currentQuoteId = null;
+
+        function resetForm() {
+            currentQuoteId = null;
+            document.getElementById('quoteDate').value = new Date().toLocaleDateString('en-IN');
+            document.getElementById('qClient').value = '';
+            document.getElementById('qContact').value = '';
+            document.getElementById('qVehicle').value = '';
+            document.getElementById('qChassis').value = '';
+            document.getElementById('baseAmount').value = 0;
+            
+            const container = document.getElementById('descContainer');
+            container.innerHTML = `
+                <div class="flex gap-2 group desc-row">
+                    <span class="text-gray-500 mt-1 flex-shrink-0 w-6">1.</span>
+                    <input type="text" class="input-transparent flex-1 desc-input" placeholder="Enter work description here...">
+                    <button onclick="removeDescRow(this)" class="no-print text-red-500 opacity-0 group-hover:opacity-100 transition"><i data-lucide="x" class="w-4 h-4"></i></button>
+                </div>
+            `;
+            
+            calcTotal();
+            
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Quote';
+            saveBtn.className = "bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2 transition shadow-lg shadow-green-600/20";
+            saveBtn.onclick = saveQuotation;
+            lucide.createIcons();
+        }
+
+        resetForm(); // Set initial state
+
+        function addDescRow(val = '') {
+            const container = document.getElementById('descContainer');
+            const row = document.createElement('div');
+            row.className = 'flex gap-2 group desc-row';
+            row.innerHTML = `
+                <span class="text-gray-500 mt-1 flex-shrink-0 w-6"></span>
+                <input type="text" class="input-transparent flex-1 desc-input" placeholder="Enter work description here..." value="${val}">
+                <button onclick="removeDescRow(this)" class="no-print text-red-500 opacity-0 group-hover:opacity-100 transition"><i data-lucide="x" class="w-4 h-4"></i></button>
+            `;
+            container.appendChild(row);
+            updateNumbers();
+            lucide.createIcons();
+        }
+
+        function removeDescRow(btn) {
+            btn.parentElement.remove();
+            updateNumbers();
+        }
+
+        function updateNumbers() {
+            const rows = document.getElementById('descContainer').children;
+            for(let i = 0; i < rows.length; i++) {
+                rows[i].querySelector('span').innerText = (i + 1) + ".";
+            }
+        }
+
+        function calcTotal() {
+            let base = parseFloat(document.getElementById('baseAmount').value);
+            if(isNaN(base)) base = 0;
+            
+            let gst = base * 0.18;
+            let grand = base + gst;
+
+            const formatINR = (num) => '₹' + num.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+
+            document.getElementById('gst').innerText = formatINR(gst);
+            document.getElementById('grandTotal').innerText = formatINR(grand);
+            return grand;
+        }
+
+        // Save & Load Functionality
+        function getFormData() {
+            const lines = [];
+            document.querySelectorAll('.desc-input').forEach(input => {
+                if(input.value.trim() !== '') lines.push(input.value.trim());
+            });
+
+            return {
+                id: currentQuoteId || Date.now(),
+                date: document.getElementById('quoteDate').value,
+                client: document.getElementById('qClient').value,
+                contact: document.getElementById('qContact').value,
+                vehicle: document.getElementById('qVehicle').value,
+                chassis: document.getElementById('qChassis').value,
+                base: parseFloat(document.getElementById('baseAmount').value) || 0,
+                lines: lines
+            };
+        }
+
+        function saveQuotation() {
+            const data = getFormData();
+            if(!data.client) return alert("Client name is required to save.");
+            
+            const quotes = JSON.parse(localStorage.getItem('erp_quotations'));
+            quotes.unshift(data); // Add to top
+            localStorage.setItem('erp_quotations', JSON.stringify(quotes));
+            
+            currentQuoteId = data.id;
+            
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.innerHTML = '<i data-lucide="refresh-cw" class="w-4 h-4"></i> Update Quote';
+            saveBtn.className = "bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2 transition shadow-lg shadow-blue-600/20";
+            saveBtn.onclick = updateQuotation;
+            
+            lucide.createIcons();
+            loadHistory();
+            alert("Quotation saved successfully!");
+        }
+
+        function updateQuotation() {
+            const data = getFormData();
+            if(!data.client) return alert("Client name is required to save.");
+            
+            let quotes = JSON.parse(localStorage.getItem('erp_quotations'));
+            const index = quotes.findIndex(q => q.id === currentQuoteId);
+            if(index !== -1) {
+                quotes[index] = data;
+                localStorage.setItem('erp_quotations', JSON.stringify(quotes));
+                loadHistory();
+                alert("Quotation updated successfully!");
+            }
+        }
+
+        function loadHistory() {
+            const quotes = JSON.parse(localStorage.getItem('erp_quotations') || '[]');
+            const list = document.getElementById('quotesList');
+            list.innerHTML = '';
+
+            if(quotes.length === 0) {
+                list.innerHTML = '<p class="text-gray-500 italic col-span-3">No saved quotations found.</p>';
+                return;
+            }
+
+            quotes.forEach(q => {
+                let grand = q.base + (q.base * 0.18);
+                list.innerHTML += `
+                    <div class="bg-white/5 border border-white/10 rounded-lg p-4 hover:bg-white/10 transition cursor-pointer" onclick="editQuotation(${q.id})">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-white truncate pr-2">${q.client}</h4>
+                            <span class="text-xs text-gray-500">${q.date}</span>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-1 truncate">${q.vehicle}</p>
+                        <p class="text-lg font-mono font-bold text-[#ff5a00]">₹${grand.toLocaleString('en-IN')}</p>
+                    </div>
+                `;
+            });
+        }
+
+        function editQuotation(id) {
+            const quotes = JSON.parse(localStorage.getItem('erp_quotations'));
+            const q = quotes.find(q => q.id === id);
+            if(!q) return;
+
+            currentQuoteId = q.id;
+            document.getElementById('quoteDate').value = q.date;
+            document.getElementById('qClient').value = q.client;
+            document.getElementById('qContact').value = q.contact || '';
+            document.getElementById('qVehicle').value = q.vehicle;
+            document.getElementById('qChassis').value = q.chassis || '';
+            document.getElementById('baseAmount').value = q.base;
+
+            // Load descriptions
+            const container = document.getElementById('descContainer');
+            container.innerHTML = '';
+            if(q.lines && q.lines.length > 0) {
+                q.lines.forEach(line => addDescRow(line));
+            } else {
+                addDescRow('');
+            }
+            
+            calcTotal();
+
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.innerHTML = '<i data-lucide="refresh-cw" class="w-4 h-4"></i> Update Quote';
+            saveBtn.className = "bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2 transition shadow-lg shadow-blue-600/20";
+            saveBtn.onclick = updateQuotation;
+            
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function convertToJobCard() {
+            const client = document.getElementById('qClient').value;
+            const vehicle = document.getElementById('qVehicle').value;
+            const chassis = document.getElementById('qChassis').value;
+
+            if(!client || !vehicle || !chassis) {
+                return alert("Please fill Client Name, Vehicle Model, and Chassis No to convert to Job Card.");
+            }
+
+            if(confirm(`Convert quotation for ${client} into an active Job Card?`)) {
+                const jobs = JSON.parse(localStorage.getItem('erp_jobCards') || '[]');
+                
+                jobs.unshift({
+                    id: Date.now(),
+                    date: new Date().toISOString().split('T')[0],
+                    fleet: client,
+                    vehicle: vehicle,
+                    chassis: chassis,
+                    stage: 'Pending',
+                    mechanic: 'Unassigned',
+                    checklist: [], // New checklist logic placeholder
+                    history: [`Job created from Quotation.`]
+                });
+
+                localStorage.setItem('erp_jobCards', JSON.stringify(jobs));
+                alert("Successfully converted to Job Card! You can view it in the Job Cards section.");
+            }
+        }
+        
+        loadHistory();
+    </script>
+</body>
+</html>
