@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SS Auto Care - Salem | Commercial Vehicle Body Building & Fabrication</title>
+    <title>SS Auto Care - Salem | Hydraulic Tipper & Vehicle Fabrication</title>
     <style>
         :root {
             --primary-green: #0b3c29;
@@ -19,7 +19,6 @@
             background-color: var(--bg-color);
             color: var(--text-color);
         }
-        /* Top Navigation Bar */
         .top-nav {
             background-color: var(--primary-green);
             display: flex;
@@ -35,8 +34,8 @@
             gap: 15px;
         }
         .brand-logo img {
-            height: 45px;
-            width: 45px;
+            height: 50px;
+            width: 50px;
             border-radius: 50%;
             background: white;
             object-fit: cover;
@@ -45,7 +44,6 @@
         .brand-logo h2 {
             margin: 0;
             font-size: 22px;
-            letter-spacing: 1px;
             color: white;
         }
         .nav-links {
@@ -61,14 +59,12 @@
             border-radius: 4px;
             font-weight: bold;
             font-size: 14px;
-            transition: 0.3s;
             border: 1px solid rgba(255,255,255,0.2);
         }
         .nav-links a:hover {
             background: var(--gold);
             color: #0b3c29;
         }
-        /* Header Banner */
         header {
             background: linear-gradient(rgba(11,60,41,0.9), rgba(11,60,41,0.9)), url('https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80');
             background-size: cover;
@@ -87,7 +83,6 @@
             font-size: 18px;
             color: #e2e8f0;
         }
-        /* Container */
         .container {
             max-width: 1100px;
             margin: 40px auto;
@@ -104,7 +99,6 @@
             color: #666;
             margin-bottom: 30px;
         }
-        /* Services Grid */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -122,7 +116,7 @@
             margin-top: 0;
             color: var(--primary-green);
         }
-        /* Gallery Grid */
+        /* Gallery & Lightbox */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -136,6 +130,11 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.08);
             text-align: center;
             padding-bottom: 15px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .gallery-item:hover {
+            transform: translateY(-5px);
         }
         .gallery-item img {
             width: 100%;
@@ -151,6 +150,32 @@
             color: #666;
             padding: 0 15px;
             margin: 0;
+        }
+        /* Lightbox Modal for Slideshow */
+        #lightbox {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            text-align: center;
+            padding-top: 60px;
+        }
+        #lightbox img {
+            max-width: 85%;
+            max-height: 75vh;
+            border: 4px solid white;
+            border-radius: 6px;
+        }
+        #lightbox .close {
+            position: absolute;
+            top: 20px; right: 35px;
+            color: white; font-size: 40px; font-weight: bold; cursor: pointer;
+        }
+        #lightbox .caption {
+            color: var(--gold);
+            font-size: 18px;
+            margin-top: 15px;
         }
         /* Footer */
         footer {
@@ -180,9 +205,6 @@
             display: block;
             margin-bottom: 8px;
         }
-        .footer-section a:hover {
-            color: var(--gold);
-        }
         .footer-bottom {
             text-align: center;
             border-top: 1px solid rgba(255,255,255,0.1);
@@ -205,18 +227,14 @@
             display: inline-block;
             font-size: 13px;
         }
-        .btn-call:hover, .btn-map:hover {
-            background: #fff;
-        }
     </style>
 </head>
 <body>
 
-    <!-- Top Navigation -->
     <div class="top-nav">
         <div class="brand-logo">
-            <!-- Logo image-ah ungaloda logo file link/name-oda maathikkalam -->
-            <img src="logo.png" alt="SS Auto Care Logo" onerror="this.src='https://via.placeholder.com/45?text=SS'">
+            <!-- உங்கள் லோகோ ஃபைலை 'logo.png' என்ற பெயரில் ரிபாசிட்டரியில் அப்லோட் செய்யவும் -->
+            <img src="logo.png" alt="SS Auto Care Logo" onerror="this.src='https://via.placeholder.com/50?text=SS'">
             <h2>SS AUTO CARE</h2>
         </div>
         <div class="nav-links">
@@ -225,60 +243,65 @@
         </div>
     </div>
 
-    <!-- Header Banner -->
     <header>
-        <h1>Commercial Vehicle Body Building & Fabrication</h1>
-        <p>Swaminathapuram, Salem | 30 Years of Trusted Engineering Excellence</p>
+        <h1>Commercial Vehicle Body Building & Hydraulic Tippers</h1>
+        <p>Swaminathapuram, Salem | Proprietor: Thennarasu | 30 Years of Trust</p>
     </header>
 
     <div class="container">
-        <h2 class="section-title">Our Specialized Works</h2>
-        <p class="section-subtitle">Precision fabrication for commercial vehicles and structural metal works</p>
+        <h2 class="section-title">Our Core Specializations</h2>
+        <p class="section-subtitle">Leading commercial vehicle body builders with top priority for hydraulic tippers</p>
         
         <div class="services-grid">
-            <div class="service-card">
-                <h3>SS 304 Food-Grade Water Tanks</h3>
-                <p>High-durability 3mm stainless steel water tanks custom-built for Ashok Leyland Dost, Tata Ace, and multi-axle commercial carriers.</p>
+            <div class="service-card" style="border-top-color: var(--gold);">
+                <h3>1. Custom Hydraulic Tippers & Open Bodies</h3>
+                <p>Heavy-duty hydraulic tipper conversions, rebar-reinforced structures, and robust box bodies built for high performance and durability.</p>
             </div>
             <div class="service-card">
-                <h3>Custom Hydraulic Tippers</h3>
-                <p>Heavy-duty open bodies, tipper conversions, rebar-reinforced structures, and precision engineering built to last.</p>
+                <h3>2. SS 304 Food-Grade Water Tanks</h3>
+                <p>Precision-engineered 3mm stainless steel water tanks custom-built for Ashok Leyland Dost, Tata Ace, and commercial carriers.</p>
             </div>
             <div class="service-card">
-                <h3>Tinkering & Spray Painting</h3>
-                <p>Professional multi-color PU paint, tape-stencil border styling, and complete commercial vehicle restoration.</p>
+                <h3>3. Tinkering & Custom Spray Painting</h3>
+                <p>Professional multi-color PU coating, clean tape-stencil border styling, and complete commercial vehicle restoration.</p>
             </div>
         </div>
 
         <h2 class="section-title">Work Gallery & Models</h2>
-        <p class="section-subtitle">Explore our recent custom fabrications and body-building designs</p>
+        <p class="section-subtitle">Click any image to view in large preview mode</p>
         
         <div class="gallery-grid">
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=500&q=80" alt="Water Tank Fabrication">
-                <h4>SS 304 Tank Model</h4>
-                <p>Custom 4000L stainless steel water tank mounted securely on commercial chassis.</p>
+            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80', 'Hydraulic Tipper Body Fabrication')">
+                <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=500&q=80" alt="Tipper">
+                <h4>Hydraulic Tipper</h4>
+                <p>Heavy duty tipper body with reinforced structure.</p>
             </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=500&q=80" alt="Hydraulic Tipper">
-                <h4>Hydraulic Tipper Body</h4>
-                <p>Robust square-box reforced tipper fabrication with smooth hydraulic operation.</p>
+            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=800&q=80', 'SS 304 Food-Grade Water Tank')">
+                <img src="https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=500&q=80" alt="Water Tank">
+                <h4>SS 304 Water Tank</h4>
+                <p>Custom 4000L stainless steel tank fabrication.</p>
             </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=500&q=80" alt="Vehicle Painting & Customization">
-                <h4>Custom Paint & Finish</h4>
-                <p>Professional spray coating with clean tape-stencil border finish.</p>
+            <div class="gallery-item" onclick="openLightbox('https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80', 'Custom Vehicle Spray Painting')">
+                <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=500&q=80" alt="Painting">
+                <h4>Custom Paint Finish</h4>
+                <p>Professional styling and border finishing.</p>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Lightbox Viewer Modal -->
+    <div id="lightbox" onclick="closeLightbox()">
+        <span class="close">&times;</span>
+        <img id="lightbox-img" src="">
+        <div class="caption" id="lightbox-caption"></div>
+    </div>
+
     <footer>
         <div class="footer-content">
             <div class="footer-section">
                 <h3>SS Auto Care</h3>
                 <p>Swaminathapuram, Salem, Tamil Nadu.</p>
-                <p>Proprietor: Thennarasu</p>
+                <p>Owner: Thennarasu</p>
                 <div class="action-btns">
                     <a href="tel:9042233115" class="btn-call">📞 Call Now</a>
                     <a href="https://maps.google.com/?q=Swaminathapuram,Salem" target="_blank" class="btn-map">📍 Location Map</a>
@@ -288,13 +311,12 @@
                 <h3>Quick Links</h3>
                 <a href="index.html">Home</a>
                 <a href="login.html">Admin Login Panel</a>
-                <a href="tel:9042233115">Contact Support</a>
             </div>
             <div class="footer-section">
-                <h3>Specialized Services</h3>
-                <p>• Commercial Vehicle Body Building</p>
-                <p>• Stainless Steel Water Tank Fabrication</p>
-                <p>• Custom Tippers & Structural Works</p>
+                <h3>Services</h3>
+                <p>• Hydraulic Tipper Body Building</p>
+                <p>• SS 304 Water Tank Fabrication</p>
+                <p>• Tinkering & Custom Painting</p>
             </div>
         </div>
         <div class="footer-bottom">
@@ -302,5 +324,15 @@
         </div>
     </footer>
 
+    <script>
+        function openLightbox(src, caption) {
+            document.getElementById('lightbox').style.display = 'block';
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox-caption').innerText = caption;
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
