@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analytics - SS Autocare</title>
+    <title>Dashboard - SS Auto Care</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -19,18 +19,21 @@
     <aside class="w-64 flex-shrink-0 border-r border-white/10 bg-[#1e2326] flex flex-col">
         <div class="p-6 border-b border-white/10">
             <h1 class="text-2xl font-bold tracking-wider uppercase text-white">
-                <span class="text-[#ff5a00]">SS</span> Autocare
+                <span class="text-[#ff5a00]">SS</span> Auto Care
             </h1>
         </div>
         <nav class="flex-1 overflow-y-auto p-4 space-y-2">
-            <a href="index.html" class="sidebar-link">
-                <i data-lucide="layout-dashboard"></i> Dashboard
-            </a>
             <a href="dashboard.html" class="sidebar-link active">
-                <i data-lucide="bar-chart-3"></i> Analytics
+                <i data-lucide="layout-dashboard"></i> Dashboard
             </a>
             <a href="attendance-advances.html" class="sidebar-link">
                 <i data-lucide="users"></i> HR & Labor
+            </a>
+            <a href="index.html" class="sidebar-link">
+                <i data-lucide="globe"></i> Public Site
+            </a>
+            <a href="login.html" class="sidebar-link">
+                <i data-lucide="log-out"></i> Logout
             </a>
         </nav>
     </aside>
@@ -38,20 +41,32 @@
     <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-gradient-to-br from-[#1e2326] to-[#0f1113]">
         <header class="h-20 flex-shrink-0 px-8 flex items-center justify-between border-b border-white/5 backdrop-blur-sm sticky top-0 z-10">
             <div>
-                <h2 class="text-xl font-semibold">Workshop Analytics</h2>
-                <p class="text-sm text-gray-400">Performance & Financial Summary</p>
+                <h2 class="text-xl font-semibold">Workshop Overview</h2>
+                <p class="text-sm text-gray-400">Salem Branch Management</p>
             </div>
         </header>
 
         <div class="p-8 space-y-8">
-            <div class="glass-panel p-6">
-                <h3 class="text-lg font-semibold mb-4">Production Overview</h3>
-                <p class="text-gray-400">Detailed analytics and reports for Salem workshop operations.</p>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="glass-panel p-6">
+                    <p class="text-sm text-gray-400">Active Job Cards</p>
+                    <h3 class="text-2xl font-bold mt-1 text-white">12</h3>
+                </div>
+                <div class="glass-panel p-6">
+                    <p class="text-sm text-gray-400">Total Workers</p>
+                    <h3 class="text-2xl font-bold mt-1 text-white">8</h3>
+                </div>
+                <div class="glass-panel p-6">
+                    <p class="text-sm text-gray-400">Pending Advances</p>
+                    <h3 class="text-2xl font-bold mt-1 text-white">₹14,500</h3>
+                </div>
+                <div class="glass-panel p-6">
+                    <p class="text-sm text-gray-400">Monthly Revenue</p>
+                    <h3 class="text-2xl font-bold mt-1 text-white">₹2,45,000</h3>
+                </div>
             </div>
         </div>
     </main>
-    <script>
-        lucide.createIcons();
-    </script>
+    <script>lucide.createIcons();</script>
 </body>
 </html>
