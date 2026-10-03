@@ -32,17 +32,27 @@
             margin: 0;
             font-size: 20px;
         }
-        .logout-btn {
-            background: #d9534f;
-            color: white;
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-action {
+            background: #fff;
+            color: var(--primary-green);
             padding: 8px 15px;
             border-radius: 4px;
             text-decoration: none;
             font-weight: bold;
             font-size: 13px;
+            border: none;
+            cursor: pointer;
+        }
+        .logout-btn {
+            background: #d9534f;
+            color: white;
         }
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 30px auto;
             padding: 20px;
         }
@@ -63,7 +73,6 @@
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         .tab-btn.active, .tab-btn:hover {
             background: var(--primary-green);
@@ -99,9 +108,17 @@
             box-sizing: border-box;
             font-size: 14px;
         }
-        textarea {
-            resize: vertical;
-            height: 100px;
+        .checklist-box {
+            background: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .checklist-box label {
+            font-weight: normal;
+            display: inline-block;
+            margin-left: 8px;
         }
         .submit-btn {
             background-color: var(--primary-green);
@@ -115,15 +132,37 @@
             cursor: pointer;
             font-size: 16px;
         }
-        .submit-btn:hover {
-            background-color: var(--accent-green);
+        /* Tables for Data Records */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 14px;
         }
-        .success-msg {
-            color: green;
-            margin-top: 15px;
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: var(--primary-green);
+            color: white;
+        }
+        .edit-btn, .delete-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
             font-weight: bold;
-            text-align: center;
-            display: none;
+            font-size: 12px;
+        }
+        .edit-btn { background: #f0ad4e; color: white; }
+        .delete-btn { background: #d9534f; color: white; }
+
+        @media print {
+            body { background: white; }
+            .nav-tabs, header, .submit-btn, .edit-btn, .delete-btn, form { display: none; }
+            .panel { display: block !important; box-shadow: none; }
         }
     </style>
 </head>
@@ -131,103 +170,160 @@
 
     <header>
         <h1>SS Auto Care - Admin Control Suite</h1>
-        <a href="index.html" class="logout-btn">Logout / Home</a>
+        <div class="header-actions">
+            <button class="btn-action" onclick="window.print()">🖨️️ Print Report</button>
+            <a href="index.html" class="btn-action logout-btn">Logout</a>
+        </div>
     </header>
 
     <div class="container">
         
-        <!-- Navigation Buttons for Sections -->
         <div class="nav-tabs">
-            <div class="tab-btn active" onclick="switchTab('attendance')">👥 Worker Attendance</div>
-            <div class="tab-btn" onclick="switchTab('jobs')">🚛 Vehicle Job Tracking</div>
-            <div class="tab-btn" onclick="switchTab('accounts')">💰 Credit / Debit Accounts</div>
+            <div class="tab-btn active" onclick="switchTab('attendance')">👥 Worker Attendance & Salary</div>
+            <div class="tab-btn" onclick="switchTab('jobs')">🚛 Vehicle Job Checklist</div>
+            <div class="tab-btn" onclick="switchTab('accounts')">💰 Credit / Debit Ledger</div>
         </div>
 
-        <!-- Panel 1: Worker Attendance -->
+        <!-- Panel 1: Attendance & Weekly Salary -->
         <div id="attendance" class="panel active">
-            <h2>Worker Attendance & Shift Manager</h2>
-            <form id="attendanceForm" onsubmit="submitForm(event, 'Attendance Recorded Successfully!')">
+            <h2>Worker Attendance & Weekly Salary Calculation</h2>
+            <form id="attendanceForm" onsubmit="addAttendance(event)">
                 <label>Worker Name:</label>
-                <input type="text" placeholder="தொழிலாளி பெயர் உள்ளிடவும்" required>
+                <input type="text" id="wName" placeholder="தொழிலாளி பெயர்" required>
                 
-                <label>Select Shift:</label>
-                <select required>
-                    <option value="">-- Shift-ஐ தேர்ந்தெடுக்கவும் --</option>
-                    <option value="Morning">Morning Shift</option>
-                    <option value="Evening">Evening Shift</option>
+                <label>Shift / Status:</label>
+                <select id="wShift" required>
                     <option value="Full Day">Full Day</option>
+                    <option value="Half Day">Half Day</option>
                     <option value="Overtime">Overtime</option>
                 </select>
 
-                <button type="submit" class="submit-btn">Save Attendance</button>
-                <div class="success-msg">Attendance saved to Google Sheet!</div>
+                <label>Daily Wages (₹):</label>
+                <input type="number" id="wWage" placeholder="நாள் கூலி" required>
+
+                <button type="submit" class="submit-btn">Save Attendance Entry</button>
             </form>
+
+            <h3>Recorded Attendance & Weekly Summary</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Worker Name</th>
+                        <th>Shift</th>
+                        <th>Daily Wage (₹)</th>
+                        <th>Est. Weekly Salary (7 Days)</th>
+                        <th>Action</th>
+                    </tr>
+                <</thead>
+                <tbody id="attendanceTableBody">
+                    <tr>
+                        <td>Murugan</td>
+                        <td>Full Day</td>
+                        <td>₹600</td>
+                        <td>₹4,200</td>
+                        <td><button class="edit-btn" onclick="alert('Editing mode')">Edit</button> <button class="delete-btn" onclick="this.closest('tr').remove()">Delete</button></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <!-- Panel 2: Vehicle Job Tracking -->
+        <!-- Panel 2: Vehicle Job Checklist -->
         <div id="jobs" class="panel">
-            <h2>Vehicle Job & Checklist Tracking</h2>
-            <form id="jobForm" onsubmit="submitForm(event, 'Job Details Saved Successfully!')">
+            <h2>Vehicle Job & Quality Checklist</h2>
+            <form onsubmit="alert('Job Checklist Saved Successfully!'); event.preventDefault();">
                 <label>Vehicle Number & Model:</label>
-                <input type="text" placeholder="எ.கா: TN 30 AB 1234 (Tata Ace / Dost)" required>
+                <input type="text" placeholder="எ.கா: TN 30 AB 1234 (Hydraulic Tipper)" required>
                 
                 <label>Customer Name & Place:</label>
-                <input type="text" placeholder="எ.கா: வடிவேலு - புதுக்கோட்டை" required>
+                <input type="text" placeholder="பெயர் - ஊர்" required>
                 
-                <label>Work Description / Checklist:</label>
-                <textarea placeholder="3000L SS Tank, Rear Gate, Ladder, Mudguard welding & painting details..." required></textarea>
+                <label>Work Checklist:</label>
+                <div class="checklist-box">
+                    <input type="checkbox" id="c1"> <label for="c1">Hydraulic Jack & Cylinder Fitting</label><br>
+                    <input type="checkbox" id="c2"> <label for="c2">Rebar & Box Structure Welding</label><br>
+                    <input type="checkbox" id="c3"> <label for="c3">SS Water Tank Sealing & Testing</label><br>
+                    <input type="checkbox" id="c4"> <label for="c4">Tinkering & Spray Painting Finish</label>
+                </div>
 
-                <button type="submit" class="submit-btn">Save Job Record</button>
-                <div class="success-msg">Job record updated successfully!</div>
+                <label>Additional Notes:</label>
+                <textarea placeholder="குறிப்புகள்..."></textarea>
+
+                <button type="submit" class="submit-btn">Save Job Card</button>
             </form>
         </div>
 
         <!-- Panel 3: Credit / Debit Accounts -->
         <div id="accounts" class="panel">
-            <h2>Credit & Debit Financial Ledger</h2>
-            <form id="accountsForm" onsubmit="submitForm(event, 'Transaction Saved Successfully!')">
-                <label>Transaction Type:</label>
-                <select required>
-                    <option value="Credit">Credit (வரவு / Income)</option>
-                    <option value="Debit">Debit (செலவு / Expense)</option>
+            <h2>Credit & Debit Financial Table</h2>
+            <form id="accountForm" onsubmit="addAccount(event)">
+                <label>Type:</label>
+                <select id="accType">
+                    <option value="Credit">Credit (வரவு)</option>
+                    <option value="Debit">Debit (செலவு)</option>
                 </select>
-
-                <label>Particulars / Details:</label>
-                <input type="text" placeholder="எ.கா: MS Sheet purchase / Advance payment" required>
-                
+                <label>Particulars:</label>
+                <input type="text" id="accDesc" placeholder="விவரம் (எ.கா: MS Sheet purchase)" required>
                 <label>Amount (₹):</label>
-                <input type="number" placeholder="0.00" required>
-
-                <button type="submit" class="submit-btn">Save Transaction</button>
-                <div class="success-msg">Transaction recorded successfully!</div>
+                <input type="number" id="accAmount" placeholder="தொகை" required>
+                <button type="submit" class="submit-btn">Add Transaction</button>
             </form>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Particulars</th>
+                        <th>Amount (₹)</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="accountTableBody">
+                    <tr>
+                        <td>Credit</td>
+                        <td>Advance from customer</td>
+                        <td>₹15,000</td>
+                        <td><button class="delete-btn" onclick="this.closest('tr').remove()">Delete</button></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
     </div>
 
     <script>
         function switchTab(tabId) {
-            // Hide all panels
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            
-            // Show selected panel
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
         }
 
-        function submitForm(event, msgText) {
-            event.preventDefault();
-            let msgBox = event.target.querySelector('.success-msg');
-            msgBox.innerText = msgText;
-            msgBox.style.display = 'block';
-            
-            setTimeout(() => {
-                event.target.reset();
-                msgBox.style.display = 'none';
-            }, 3000);
+        function addAttendance(e) {
+            e.preventDefault();
+            let name = document.getElementById('wName').value;
+            let shift = document.getElementById('wShift').value;
+            let wage = parseFloat(document.getElementById('wWage').value);
+            let weekly = wage * 7;
+
+            let tbody = document.getElementById('attendanceTableBody');
+            let row = document.createElement('tr');
+            row.innerHTML = `<td>${name}</td><td>${shift}</td><td>₹${wage}</td><td>₹${weekly}</td><td><button class="edit-btn" onclick="alert('Editing...')">Edit</button> <button class="delete-btn" onclick="this.closest('tr').remove()">Delete</button></td>`;
+            tbody.appendChild(row);
+            e.target.reset();
+        }
+
+        function addAccount(e) {
+            e.preventDefault();
+            let type = document.getElementById('accType').value;
+            let desc = document.getElementById('accDesc').value;
+            let amt = document.getElementById('accAmount').value;
+
+            let tbody = document.getElementById('accountTableBody');
+            let row = document.createElement('tr');
+            row.innerHTML = `<td>${type}</td><td>${desc}</td><td>₹${amt}</td><td><button class="delete-btn" onclick="this.closest('tr').remove()">Delete</button></td>`;
+            tbody.appendChild(row);
+            e.target.reset();
         }
     </script>
-
 </body>
 </html>
