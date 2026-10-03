@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SS Autocare</title>
+    <title>Login - SS Auto Care</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -12,19 +12,15 @@
         .glass-panel { background: rgba(42, 52, 57, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; }
         .input-dark { background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); color: white; border-radius: 0.5rem; padding: 0.75rem 1rem; outline: none; width: 100%; }
         .input-dark:focus { border-color: #ff5a00; box-shadow: 0 0 0 1px #ff5a00; }
-        .btn-primary { background-color: #ff5a00; color: white; padding: 0.75rem 1rem; border-radius: 0.5rem; font-weight: 500; width: 100%; cursor: pointer; transition: all 0.2s; }
-        .btn-primary:hover { background-color: #e04f00; }
     </style>
 </head>
 <body class="flex items-center justify-center h-screen bg-gradient-to-br from-[#1e2326] to-[#0f1113]">
     <div class="glass-panel p-8 w-full max-w-md shadow-2xl">
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold tracking-wider uppercase text-white mb-2">
-                <span class="text-[#ff5a00]">SS</span> Autocare
-            </h1>
-            <p class="text-sm text-gray-400">Sign in to access workshop ERP</p>
+            <h1 class="text-3xl font-bold uppercase text-white mb-2"><span class="text-[#ff5a00]">SS</span> Auto Care</h1>
+            <p class="text-sm text-gray-400">Sign in to access Workshop ERP</p>
         </div>
-        <form onsubmit="event.preventDefault(); window.location.href='index.html';" class="space-y-6">
+        <form onsubmit="event.preventDefault(); window.location.href='dashboard.html';" class="space-y-6">
             <div>
                 <label class="block text-sm text-gray-400 mb-2">Username / Email</label>
                 <input type="text" class="input-dark" placeholder="admin@ssautocare.com" required>
@@ -33,11 +29,12 @@
                 <label class="block text-sm text-gray-400 mb-2">Password</label>
                 <input type="password" class="input-dark" placeholder="••••••••" required>
             </div>
-            <button type="submit" class="btn-primary">Login to Dashboard</button>
+            <button type="submit" class="w-full py-3 bg-[#ff5a00] text-white rounded-lg font-medium hover:bg-[#e04f00] transition">Login to Dashboard</button>
         </form>
+        <div class="mt-4 text-center">
+            <a href="index.html" class="text-sm text-gray-400 hover:text-white">&larr; Back to Home</a>
+        </div>
     </div>
-    <script>
-        lucide.createIcons();
-    </script>
+    <script>lucide.createIcons();</script>
 </body>
 </html>
