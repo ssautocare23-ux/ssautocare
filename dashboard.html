@@ -1,329 +1,108 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - SS Auto Care</title>
+    <title>Dashboard - SS Autocare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root {
-            --primary-green: #0b3c29;
-            --accent-green: #1b5e3d;
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-color: #333;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-        }
-        header {
-            background-color: var(--primary-green);
-            color: white;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 4px solid var(--accent-green);
-        }
-        header h1 {
-            margin: 0;
-            font-size: 20px;
-        }
-        .header-actions {
-            display: flex;
-            gap: 10px;
-        }
-        .btn-action {
-            background: #fff;
-            color: var(--primary-green);
-            padding: 8px 15px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 13px;
-            border: none;
-            cursor: pointer;
-        }
-        .logout-btn {
-            background: #d9534f;
-            color: white;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 30px auto;
-            padding: 20px;
-        }
-        .nav-tabs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        .tab-btn {
-            background: white;
-            border: 2px solid var(--primary-green);
-            color: var(--primary-green);
-            padding: 15px;
-            text-align: center;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .tab-btn.active, .tab-btn:hover {
-            background: var(--primary-green);
-            color: white;
-        }
-        .panel {
-            display: none;
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-        .panel.active {
-            display: block;
-        }
-        h2 {
-            color: var(--primary-green);
-            margin-top: 0;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-        }
-        label {
-            display: block;
-            margin: 15px 0 5px 0;
-            font-weight: 600;
-            color: #444;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-        .checklist-box {
-            background: #f9f9f9;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-top: 10px;
-        }
-        .checklist-box label {
-            font-weight: normal;
-            display: inline-block;
-            margin-left: 8px;
-        }
-        .submit-btn {
-            background-color: var(--primary-green);
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            width: 100%;
-            margin-top: 20px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        /* Tables for Data Records */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 14px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: var(--primary-green);
-            color: white;
-        }
-        .edit-btn, .delete-btn {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 12px;
-        }
-        .edit-btn { background: #f0ad4e; color: white; }
-        .delete-btn { background: #d9534f; color: white; }
-
-        @media print {
-            body { background: white; }
-            .nav-tabs, header, .submit-btn, .edit-btn, .delete-btn, form { display: none; }
-            .panel { display: block !important; box-shadow: none; }
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #1e2326; color: #ffffff; }
+        .glass-panel { background: rgba(42, 52, 57, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; }
+        .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.5rem; color: #9ca3af; transition: all 0.2s; }
+        .sidebar-link:hover { background: rgba(255, 255, 255, 0.05); color: white; }
+        .sidebar-link.active { background: rgba(255, 90, 0, 0.1); color: #ff5a00; border-right: 3px solid #ff5a00; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e2326; }
+        ::-webkit-scrollbar-thumb { background: #3F4A50; border-radius: 4px; }
     </style>
 </head>
-<body>
-
-    <header>
-        <h1>SS Auto Care - Admin Control Suite</h1>
-        <div class="header-actions">
-            <button class="btn-action" onclick="window.print()">🖨️️ Print Report</button>
-            <a href="index.html" class="btn-action logout-btn">Logout</a>
+<body class="flex h-screen overflow-hidden">
+    <aside class="w-64 flex-shrink-0 border-r border-white/10 bg-[#1e2326] flex flex-col">
+        <div class="p-6 border-b border-white/10">
+            <h1 class="text-2xl font-bold tracking-wider uppercase text-white">
+                <span class="text-[#ff5a00]">SS</span> Autocare
+            </h1>
         </div>
-    </header>
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+            <a href="index.html" class="sidebar-link active">
+                <i data-lucide="layout-dashboard"></i> Dashboard
+            </a>
+            <a href="dashboard.html" class="sidebar-link">
+                <i data-lucide="bar-chart-3"></i> Analytics
+            </a>
+            <a href="attendance-advances.html" class="sidebar-link">
+                <i data-lucide="users"></i> HR & Labor
+            </a>
+            <a href="login.html" class="sidebar-link">
+                <i data-lucide="log-out"></i> Logout
+            </a>
+        </nav>
+    </aside>
 
-    <div class="container">
-        
-        <div class="nav-tabs">
-            <div class="tab-btn active" onclick="switchTab('attendance')">👥 Worker Attendance & Salary</div>
-            <div class="tab-btn" onclick="switchTab('jobs')">🚛 Vehicle Job Checklist</div>
-            <div class="tab-btn" onclick="switchTab('accounts')">💰 Credit / Debit Ledger</div>
-        </div>
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-gradient-to-br from-[#1e2326] to-[#0f1113]">
+        <header class="h-20 flex-shrink-0 px-8 flex items-center justify-between border-b border-white/5 backdrop-blur-sm sticky top-0 z-10">
+            <div>
+                <h2 class="text-xl font-semibold">Dashboard Overview</h2>
+                <p class="text-sm text-gray-400">SS Auto Care - Workshop Management</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-sm text-gray-300">Salem Branch</span>
+            </div>
+        </header>
 
-        <!-- Panel 1: Attendance & Weekly Salary -->
-        <div id="attendance" class="panel active">
-            <h2>Worker Attendance & Weekly Salary Calculation</h2>
-            <form id="attendanceForm" onsubmit="addAttendance(event)">
-                <label>Worker Name:</label>
-                <input type="text" id="wName" placeholder="தொழிலாளி பெயர்" required>
-                
-                <label>Shift / Status:</label>
-                <select id="wShift" required>
-                    <option value="Full Day">Full Day</option>
-                    <option value="Half Day">Half Day</option>
-                    <option value="Overtime">Overtime</option>
-                </select>
-
-                <label>Daily Wages (₹):</label>
-                <input type="number" id="wWage" placeholder="நாள் கூலி" required>
-
-                <button type="submit" class="submit-btn">Save Attendance Entry</button>
-            </form>
-
-            <h3>Recorded Attendance & Weekly Summary</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Worker Name</th>
-                        <th>Shift</th>
-                        <th>Daily Wage (₹)</th>
-                        <th>Est. Weekly Salary (7 Days)</th>
-                        <th>Action</th>
-                    </tr>
-                <</thead>
-                <tbody id="attendanceTableBody">
-                    <tr>
-                        <td>Murugan</td>
-                        <td>Full Day</td>
-                        <td>₹600</td>
-                        <td>₹4,200</td>
-                        <td><button class="edit-btn" onclick="alert('Editing mode')">Edit</button> <button class="delete-btn" onclick="this.closest('tr').remove()">Delete</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Panel 2: Vehicle Job Checklist -->
-        <div id="jobs" class="panel">
-            <h2>Vehicle Job & Quality Checklist</h2>
-            <form onsubmit="alert('Job Checklist Saved Successfully!'); event.preventDefault();">
-                <label>Vehicle Number & Model:</label>
-                <input type="text" placeholder="எ.கா: TN 30 AB 1234 (Hydraulic Tipper)" required>
-                
-                <label>Customer Name & Place:</label>
-                <input type="text" placeholder="பெயர் - ஊர்" required>
-                
-                <label>Work Checklist:</label>
-                <div class="checklist-box">
-                    <input type="checkbox" id="c1"> <label for="c1">Hydraulic Jack & Cylinder Fitting</label><br>
-                    <input type="checkbox" id="c2"> <label for="c2">Rebar & Box Structure Welding</label><br>
-                    <input type="checkbox" id="c3"> <label for="c3">SS Water Tank Sealing & Testing</label><br>
-                    <input type="checkbox" id="c4"> <label for="c4">Tinkering & Spray Painting Finish</label>
+        <div class="p-8 space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="glass-panel p-6">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm text-gray-400">Active Job Cards</p>
+                            <h3 class="text-2xl font-bold mt-1 text-white">12</h3>
+                        </div>
+                        <div class="p-3 bg-[#ff5a00]/10 rounded-xl text-[#ff5a00]">
+                            <i data-lucide="clipboard-list" class="w-6 h-6"></i>
+                        </div>
+                    </div>
                 </div>
-
-                <label>Additional Notes:</label>
-                <textarea placeholder="குறிப்புகள்..."></textarea>
-
-                <button type="submit" class="submit-btn">Save Job Card</button>
-            </form>
+                <div class="glass-panel p-6">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm text-gray-400">Total Workers</p>
+                            <h3 class="text-2xl font-bold mt-1 text-white">8</h3>
+                        </div>
+                        <div class="p-3 bg-blue-500/10 rounded-xl text-blue-400">
+                            <i data-lucide="users" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel p-6">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm text-gray-400">Pending Advances</p>
+                            <h3 class="text-2xl font-bold mt-1 text-white">₹14,500</h3>
+                        </div>
+                        <div class="p-3 bg-red-500/10 rounded-xl text-red-400">
+                            <i data-lucide="banknote" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel p-6">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm text-gray-400">Monthly Revenue</p>
+                            <h3 class="text-2xl font-bold mt-1 text-white">₹2,45,000</h3>
+                        </div>
+                        <div class="p-3 bg-green-500/10 rounded-xl text-green-400">
+                            <i data-lucide="receipt" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <!-- Panel 3: Credit / Debit Accounts -->
-        <div id="accounts" class="panel">
-            <h2>Credit & Debit Financial Table</h2>
-            <form id="accountForm" onsubmit="addAccount(event)">
-                <label>Type:</label>
-                <select id="accType">
-                    <option value="Credit">Credit (வரவு)</option>
-                    <option value="Debit">Debit (செலவு)</option>
-                </select>
-                <label>Particulars:</label>
-                <input type="text" id="accDesc" placeholder="விவரம் (எ.கா: MS Sheet purchase)" required>
-                <label>Amount (₹):</label>
-                <input type="number" id="accAmount" placeholder="தொகை" required>
-                <button type="submit" class="submit-btn">Add Transaction</button>
-            </form>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Type</th>
-                        <th>Particulars</th>
-                        <th>Amount (₹)</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="accountTableBody">
-                    <tr>
-                        <td>Credit</td>
-                        <td>Advance from customer</td>
-                        <td>₹15,000</td>
-                        <td><button class="delete-btn" onclick="this.closest('tr').remove()">Delete</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-    </div>
-
+    </main>
     <script>
-        function switchTab(tabId) {
-            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-
-        function addAttendance(e) {
-            e.preventDefault();
-            let name = document.getElementById('wName').value;
-            let shift = document.getElementById('wShift').value;
-            let wage = parseFloat(document.getElementById('wWage').value);
-            let weekly = wage * 7;
-
-            let tbody = document.getElementById('attendanceTableBody');
-            let row = document.createElement('tr');
-            row.innerHTML = `<td>${name}</td><td>${shift}</td><td>₹${wage}</td><td>₹${weekly}</td><td><button class="edit-btn" onclick="alert('Editing...')">Edit</button> <button class="delete-btn" onclick="this.closest('tr').remove()">Delete</button></td>`;
-            tbody.appendChild(row);
-            e.target.reset();
-        }
-
-        function addAccount(e) {
-            e.preventDefault();
-            let type = document.getElementById('accType').value;
-            let desc = document.getElementById('accDesc').value;
-            let amt = document.getElementById('accAmount').value;
-
-            let tbody = document.getElementById('accountTableBody');
-            let row = document.createElement('tr');
-            row.innerHTML = `<td>${type}</td><td>${desc}</td><td>₹${amt}</td><td><button class="delete-btn" onclick="this.closest('tr').remove()">Delete</button></td>`;
-            tbody.appendChild(row);
-            e.target.reset();
-        }
+        lucide.createIcons();
     </script>
 </body>
 </html>
