@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR & Labor Tracker - SS Autocare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #1e2326; color: #ffffff; }
+        .glass-panel { background: rgba(42, 52, 57, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; }
+        .sidebar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.5rem; color: #9ca3af; transition: all 0.2s; }
+        .sidebar-link:hover { background: rgba(255, 255, 255, 0.05); color: white; }
+        .sidebar-link.active { background: rgba(255, 90, 0, 0.1); color: #ff5a00; border-right: 3px solid #ff5a00; }
+        .table-dark th { background: rgba(0, 0, 0, 0.2); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; color: #9ca3af; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 1rem; text-align: left;}
+        .table-dark td { border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 1rem; }
+        
+        .input-dark { background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); color: white; border-radius: 0.5rem; padding: 0.5rem 0.75rem; outline: none; transition: all 0.2s; width: 100%; color-scheme: dark;}
+        .input-dark:focus { border-color: #ff5a00; box-shadow: 0 0 0 1px #ff5a00; }
+        .btn-primary { background-color: #ff5a00; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 500; transition: all 0.2s; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .btn-primary:hover { background-color: #e04f00; }
+        .btn-secondary { background-color: transparent; border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 500; transition: all 0.2s; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;}
+        .btn-secondary:hover { background-color: rgba(255, 255, 255, 0.1); }
+        .btn-danger { background-color: #ef4444; color: white; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.875rem; cursor: pointer; transition: all 0.2s; }
+        .btn-danger:hover { background-color: #dc2626; }
+        
+        .shift-checkbox { appearance: none; width: 1.25rem; height: 1.25rem; border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 0.25rem; background: rgba(0, 0, 0, 0.2); cursor: pointer; position: relative; transition: all 0.2s; }
+        .shift-checkbox:checked { background-color: #ff5a00; border-color: #ff5a00; }
+        .shift-checkbox:checked::after { content: ''; position: absolute; left: 6px; top: 2px; width: 5px; height: 10px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+        
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e2326; }
+        ::-webkit-scrollbar-thumb { background: #3F4A50; border-radius: 4px; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+    <aside class="w-64 flex-shrink-0 border-r border-white/10 bg-[#1e2326] flex flex-col">
+        <div class="p-6 border-b border-white/10">
+            <h1 class="text-2xl font-bold tracking-wider uppercase text-white">
+                <span class="text-[#ff5a00]">SS</span> Autocare
+            </h1>
+        </div>
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+            <a href="index.html" class="sidebar-link">
+                <i data-lucide="layout-dashboard"></i> Dashboard
+            </a>
+            <a href="job-cards.html" class="sidebar-link">
+                <i data-lucide="clipboard-list"></i> Job Cards
+            </a>
+            <a href="attendance-advances.html" class="sidebar-link active">
+                <i data-lucide="users"></i> HR & Labor
+            </a>
+            <a href="contractor-ledger.html" class="sidebar-link">
+                <i data-lucide="hard-hat"></i> Contractors
+            </a>
+            <a href="purchase.html" class="sidebar-link">
+                <i data-lucide="shopping-cart"></i> Purchases
+            </a>
+            <a href="sales.html" class="sidebar-link">
+                <i data-lucide="receipt"></i> Sales Invoices
+            </a>
+            <a href="quotations.html" class="sidebar-link">
+                <i data-lucide="file-text"></i> Quotations
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-gradient-to-br from-[#1e2326] to-[#0f1113]">
+        <header class="h-20 flex-shrink-0 px-8 flex items-center justify-between border-b border-white/5 backdrop-blur-sm sticky top-0 z-10">
+            <div>
+                <h2 class="text-xl font-semibold">HR & Labor Management</h2>
+                <p class="text-sm text-gray-400">Daily 4-Shift Attendance & Advances Ledger</p>
+            </div>
+            <div class="flex gap-4">
+                <button class="btn-secondary text-[#007bff] border-[#007bff]" onclick="document.getElementById('employeeModal').classList.remove('hidden')">
+                    <i data-lucide="user-cog" class="w-4 h-4"></i> Manage Employees
+                </button>
+                <button class="btn-secondary" onclick="openSettlement()">
+                    <i data-lucide="calculator" class="w-4 h-4"></i> Weekly Settlement
+                </button>
+            </div>
+        </header>
+
+        <div class="p-8 space-y-8">
+            <!-- 4-Shift Attendance -->
+            <div class="glass-panel">
+                <div class="p-6 border-b border-white/5 flex justify-between items-center">
+                    <h3 class="text-lg font-semibold flex items-center gap-2">
+                        <i data-lucide="clock" class="text-[#ff5a00]"></i> Daily 4-Shift Attendance
+                    </h3>
+                    <div class="flex items-center gap-3">
+                        <label class="text-sm text-gray-400">Select Date:</label>
+                        <input type="date" id="attendanceDate" class="input-dark w-auto" onchange="loadAttendance()">
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full table-dark">
+                        <thead>
+                            <tr>
+                                <th>Worker Name</th>
+                                <th>Category</th>
+                                <th class="text-center">Morning (8-12)</th>
+                                <th class="text-center">Afternoon (1-5)</th>
+                                <th class="text-center">Evening (6-10)</th>
+                                <th class="text-center">Night (OT)</th>
+                                <th class="text-center text-[#ff5a00]">Daily Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Advances Ledger -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Petty Cash -->
+                <div class="glass-panel p-6">
+                    <h3 class="text-lg font-semibold flex items-center gap-2 mb-6 text-green-400">
+                        <i data-lucide="banknote"></i> Issue Petty Advance (Daily)
+                    </h3>
+                    <form class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Date</label>
+                                <input type="date" id="daDate" class="input-dark">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Select Worker</label>
+                                <select id="daWorker" class="input-dark worker-select"></select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Amount (₹)</label>
+                            <input type="number" id="daAmount" class="input-dark">
+                        </div>
+                        <button type="button" onclick="issueDailyAdvance()" class="btn-primary w-full mt-4">Issue Petty Cash</button>
+                    </form>
+                    <div class="mt-6 pt-4 border-t border-white/5">
+                        <h4 class="text-sm font-medium text-gray-400 mb-3">Recent Petty Advances</h4>
+                        <div class="max-h-40 overflow-y-auto pr-2">
+                            <ul id="daList" class="space-y-2 text-sm"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Advance -->
+                <div class="glass-panel p-6">
+                    <h3 class="text-lg font-semibold flex items-center gap-2 mb-6 text-[#007bff]">
+                        <i data-lucide="landmark"></i> Update Main Advance Ledger
+                    </h3>
+                    <form class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Select Worker</label>
+                            <select id="maWorker" class="input-dark worker-select"></select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Action</label>
+                                <select id="maAction" class="input-dark">
+                                    <option value="add">+ Add Loan</option>
+                                    <option value="deduct">- Deduct (Recovery)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Amount (₹)</label>
+                                <input type="number" id="maAmount" class="input-dark">
+                            </div>
+                        </div>
+                        <button type="button" onclick="updateMainAdvance()" class="btn-secondary w-full mt-4 border-[#007bff] text-[#007bff]">Update Ledger</button>
+                    </form>
+                    <div class="mt-6 pt-4 border-t border-white/5">
+                        <h4 class="text-sm font-medium text-gray-400 mb-3">Current Main Advance Balances</h4>
+                        <ul id="maBalances" class="space-y-2 text-sm"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settlement Area -->
+            <div id="settlementArea" class="glass-panel p-6 hidden border-[#ff5a00]/30 shadow-[0_0_20px_rgba(255,90,0,0.1)] mb-10">
+                <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                    <h3 class="text-xl font-semibold text-white flex items-center gap-2">
+                        <i data-lucide="calculator" class="text-[#ff5a00]"></i> Weekly Settlement Generator
+                    </h3>
+                    <button onclick="document.getElementById('settlementArea').classList.add('hidden')" class="text-gray-400 hover:text-white">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                
+                <div class="flex gap-4 items-end mb-6 bg-white/5 p-4 rounded-lg">
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">From Date</label>
+                        <input type="date" id="settlementStart" class="input-dark w-40">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">To Date</label>
+                        <input type="date" id="settlementEnd" class="input-dark w-40">
+                    </div>
+                    <button class="btn-primary" onclick="calculateSettlements()">Calculate</button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full table-dark">
+                        <thead>
+                            <tr>
+                                <th>Worker Name</th>
+                                <th>Total Shifts</th>
+                                <th>Shift Rate</th>
+                                <th>Gross Salary</th>
+                                <th class="text-red-400">Petty Cash Deduct (Week)</th>
+                                <th class="text-[#007bff]">Main Adv Balance</th>
+                                <th class="text-green-400 font-bold">Net Payable</th>
+                            </tr>
+                        </thead>
+                        <tbody id="settlementBody">
+                            <tr><td colspan="7" class="text-center text-gray-500 py-4">Select date range and click calculate.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Employee Management Modal -->
+    <div id="employeeModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center">
+        <div class="glass-panel p-8 w-full max-w-2xl bg-[#1e2326] border border-white/10 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold flex items-center gap-2 text-white">
+                    <i data-lucide="users" class="text-[#007bff]"></i> Employee Database
+                </h3>
+                <button onclick="document.getElementById('employeeModal').classList.add('hidden')" class="text-gray-400 hover:text-white">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            
+            <!-- Add Employee Form -->
+            <div class="bg-white/5 p-4 rounded-lg mb-6 border border-white/10">
+                <h4 class="text-sm font-semibold text-gray-300 mb-3 uppercase tracking-wider">Add New Employee</h4>
+                <div class="grid grid-cols-3 gap-4 items-end">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Full Name</label>
+                        <input type="text" id="newEmpName" class="input-dark text-sm" placeholder="e.g. Ramesh">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Role / Category</label>
+                        <input type="text" id="newEmpRole" class="input-dark text-sm" placeholder="e.g. Welder">
+                    </div>
+                    <div class="flex gap-2 items-end">
+                        <div class="flex-1">
+                            <label class="block text-xs text-gray-400 mb-1">Shift Rate (₹)</label>
+                            <input type="number" id="newEmpRate" class="input-dark text-sm" placeholder="250">
+                        </div>
+                        <button onclick="addEmployee()" class="btn-primary h-[38px]"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employee List -->
+            <div class="overflow-y-auto flex-1">
+                <table class="w-full table-dark">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Shift Rate (₹)</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeeListBody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Init Data Structs
+        if(!localStorage.getItem('erp_employees')) {
+            const defaultWorkers = [
+                { id: 'W1', name: 'Kannan', role: 'Welder', rate: 250 },
+                { id: 'W2', name: 'Murugan', role: 'Fitter', rate: 220 },
+                { id: 'W3', name: 'Suresh', role: 'Helper', rate: 150 },
+                { id: 'W4', name: 'Raja', role: 'Welder', rate: 250 }
+            ];
+            localStorage.setItem('erp_employees', JSON.stringify(defaultWorkers));
+        }
+
+        if(!localStorage.getItem('erp_attendance_daily')) localStorage.setItem('erp_attendance_daily', '{}'); 
+        if(!localStorage.getItem('erp_dailyAdvances')) localStorage.setItem('erp_dailyAdvances', '[]'); 
+        if(!localStorage.getItem('erp_mainAdvances')) localStorage.setItem('erp_mainAdvances', '[]');
+
+        const todayDate = new Date().toISOString().split('T')[0];
+        document.getElementById('attendanceDate').value = todayDate;
+        document.getElementById('daDate').value = todayDate;
+        let currentDate = todayDate;
+        let workers = [];
+
+        function loadData() {
+            workers = JSON.parse(localStorage.getItem('erp_employees'));
+            
+            // Populate Employee Management Modal
+            const empBody = document.getElementById('employeeListBody');
+            empBody.innerHTML = '';
+            workers.forEach(w => {
+                empBody.innerHTML += `
+                    <tr>
+                        <td class="font-medium text-white">${w.name}</td>
+                        <td class="text-gray-400">${w.role}</td>
+                        <td class="font-mono text-green-400">₹${w.rate}</td>
+                        <td class="text-right">
+                            <button onclick="deleteEmployee('${w.id}')" class="btn-danger p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            lucide.createIcons();
+
+            // Render Selects
+            document.querySelectorAll('.worker-select').forEach(sel => {
+                const currentVal = sel.value;
+                sel.innerHTML = '<option value="">-- Select Worker --</option>';
+                workers.forEach(w => {
+                    sel.innerHTML += `<option value="${w.id}">${w.name} (${w.role})</option>`;
+                });
+                sel.value = currentVal;
+            });
+
+            loadAttendance();
+            loadAdvances();
+        }
+
+        function addEmployee() {
+            const name = document.getElementById('newEmpName').value;
+            const role = document.getElementById('newEmpRole').value;
+            const rate = document.getElementById('newEmpRate').value;
+            if(!name || !role || !rate) return alert("Fill all employee fields");
+            
+            const newEmp = {
+                id: 'W' + Date.now(),
+                name: name,
+                role: role,
+                rate: parseFloat(rate)
+            };
+            
+            workers.push(newEmp);
+            localStorage.setItem('erp_employees', JSON.stringify(workers));
+            
+            document.getElementById('newEmpName').value = '';
+            document.getElementById('newEmpRole').value = '';
+            document.getElementById('newEmpRate').value = '';
+            
+            loadData();
+        }
+
+        function deleteEmployee(id) {
+            if(confirm("Are you sure you want to delete this employee? Their past records will remain, but they won't appear in lists.")) {
+                workers = workers.filter(w => w.id !== id);
+                localStorage.setItem('erp_employees', JSON.stringify(workers));
+                loadData();
+            }
+        }
+
+        function loadAttendance() {
+            currentDate = document.getElementById('attendanceDate').value;
+            if(!currentDate) return;
+
+            const allAtt = JSON.parse(localStorage.getItem('erp_attendance_daily'));
+            const dayAtt = allAtt[currentDate] || {};
+
+            const attBody = document.getElementById('attendanceBody');
+            attBody.innerHTML = '';
+            workers.forEach(w => {
+                const tr = document.createElement('tr');
+                let shifts = ['Mng', 'Aft', 'Eve', 'Night'];
+                let rowHtml = `<td class="font-medium">${w.name}</td><td class="text-gray-400 text-sm">${w.role}</td>`;
+                
+                let count = 0;
+                shifts.forEach(s => {
+                    const key = `${w.id}_${s}`;
+                    const isChecked = dayAtt[key] ? 'checked' : '';
+                    if(isChecked) count++;
+                    rowHtml += `<td class="text-center"><input type="checkbox" class="shift-checkbox" data-worker="${w.id}" data-shift="${s}" ${isChecked} onchange="toggleShift(this)"></td>`;
+                });
+                
+                rowHtml += `<td class="text-center font-bold text-[#ff5a00]" id="total-${w.id}">${count}</td>`;
+                tr.innerHTML = rowHtml;
+                attBody.appendChild(tr);
+            });
+        }
+
+        function toggleShift(checkbox) {
+            const wId = checkbox.dataset.worker;
+            const shift = checkbox.dataset.shift;
+            const key = `${wId}_${shift}`;
+            
+            const allAtt = JSON.parse(localStorage.getItem('erp_attendance_daily'));
+            if(!allAtt[currentDate]) allAtt[currentDate] = {};
+            
+            allAtt[currentDate][key] = checkbox.checked;
+            localStorage.setItem('erp_attendance_daily', JSON.stringify(allAtt));
+            
+            let count = 0;
+            document.querySelectorAll(`.shift-checkbox[data-worker="${wId}"]`).forEach(cb => {
+                if(cb.checked) count++;
+            });
+            document.getElementById(`total-${wId}`).textContent = count;
+        }
+
+        function loadAdvances() {
+            const da = JSON.parse(localStorage.getItem('erp_dailyAdvances'));
+            const ma = JSON.parse(localStorage.getItem('erp_mainAdvances'));
+
+            const daList = document.getElementById('daList');
+            daList.innerHTML = da.length === 0 ? '<li class="text-gray-500 italic">No advances issued.</li>' : '';
+            [...da].reverse().forEach(d => {
+                daList.innerHTML += `
+                <li class="flex justify-between items-center bg-white/5 p-2 rounded border-l-2 border-green-500 mb-1">
+                    <div>
+                        <span class="block text-white">${d.name}</span>
+                        <span class="text-xs text-gray-500">${d.date}</span>
+                    </div>
+                    <span class="text-green-400 font-mono font-bold">₹${d.amount}</span>
+                </li>`;
+            });
+
+            const maList = document.getElementById('maBalances');
+            maList.innerHTML = ma.length === 0 ? '<li class="text-gray-500 italic">No main advances.</li>' : '';
+            ma.forEach(m => {
+                maList.innerHTML += `<li class="flex justify-between bg-white/5 p-2 rounded mb-1"><span>${m.name}</span><span class="text-red-400 font-mono font-bold">₹${m.balance}</span></li>`;
+            });
+        }
+
+        function issueDailyAdvance() {
+            const date = document.getElementById('daDate').value;
+            const wSel = document.getElementById('daWorker');
+            const amt = document.getElementById('daAmount').value;
+            if(!date || !wSel.value || !amt) return alert("Fill all fields");
+            
+            const name = wSel.options[wSel.selectedIndex].text.split('(')[0].trim();
+            const da = JSON.parse(localStorage.getItem('erp_dailyAdvances'));
+            da.push({ date: date, workerId: wSel.value, name: name, amount: parseFloat(amt) });
+            localStorage.setItem('erp_dailyAdvances', JSON.stringify(da));
+            
+            document.getElementById('daAmount').value = '';
+            loadAdvances();
+        }
+
+        function updateMainAdvance() {
+            const wSel = document.getElementById('maWorker');
+            const action = document.getElementById('maAction').value;
+            const amt = parseFloat(document.getElementById('maAmount').value);
+            if(!wSel.value || !amt) return alert("Fill all fields");
+            
+            const name = wSel.options[wSel.selectedIndex].text.split('(')[0].trim();
+            let ma = JSON.parse(localStorage.getItem('erp_mainAdvances'));
+            
+            let record = ma.find(m => m.workerId === wSel.value);
+            if(!record) {
+                record = { workerId: wSel.value, name: name, balance: 0 };
+                ma.push(record);
+            }
+            
+            if(action === 'add') record.balance += amt;
+            else record.balance -= amt;
+            
+            if(record.balance < 0) record.balance = 0;
+            
+            localStorage.setItem('erp_mainAdvances', JSON.stringify(ma));
+            document.getElementById('maAmount').value = '';
+            loadAdvances();
+        }
+
+        function openSettlement() {
+            document.getElementById('settlementArea').classList.remove('hidden');
+            const end = new Date();
+            const start = new Date();
+            start.setDate(end.getDate() - 6);
+            document.getElementById('settlementStart').value = start.toISOString().split('T')[0];
+            document.getElementById('settlementEnd').value = end.toISOString().split('T')[0];
+            document.getElementById('settlementArea').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function calculateSettlements() {
+            const startDateStr = document.getElementById('settlementStart').value;
+            const endDateStr = document.getElementById('settlementEnd').value;
+            
+            if(!startDateStr || !endDateStr) return alert("Select date range");
+            
+            const start = new Date(startDateStr);
+            const end = new Date(endDateStr);
+            const sBody = document.getElementById('settlementBody');
+            sBody.innerHTML = '';
+            
+            const allAtt = JSON.parse(localStorage.getItem('erp_attendance_daily'));
+            const da = JSON.parse(localStorage.getItem('erp_dailyAdvances'));
+            const ma = JSON.parse(localStorage.getItem('erp_mainAdvances'));
+            
+            workers.forEach(w => {
+                let totalShifts = 0;
+                for (let dateStr in allAtt) {
+                    const d = new Date(dateStr);
+                    if(d >= start && d <= end) {
+                        const dayAtt = allAtt[dateStr];
+                        ['Mng','Aft','Eve','Night'].forEach(s => {
+                            if(dayAtt[`${w.id}_${s}`]) totalShifts++;
+                        });
+                    }
+                }
+                
+                let daTotal = 0;
+                da.filter(d => {
+                    if(d.workerId !== w.id) return false;
+                    const dDate = new Date(d.date);
+                    return dDate >= start && dDate <= end;
+                }).forEach(d => { daTotal += d.amount; });
+                
+                let maRec = ma.find(m => m.workerId === w.id);
+                let maBalance = maRec ? maRec.balance : 0;
+                
+                const gross = totalShifts * w.rate;
+                const net = gross - daTotal;
+                
+                sBody.innerHTML += `
+                    <tr class="hover:bg-white/5">
+                        <td class="font-medium">${w.name}</td>
+                        <td class="font-bold text-[#ff5a00]">${totalShifts}</td>
+                        <td>₹${w.rate}</td>
+                        <td class="font-mono">₹${gross}</td>
+                        <td class="text-red-400 font-mono">-₹${daTotal}</td>
+                        <td class="text-[#007bff] font-mono">₹${maBalance}</td>
+                        <td class="text-green-400 font-bold text-lg font-mono">₹${net}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
