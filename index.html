@@ -8,26 +8,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: #0f172a; }
-        .light-panel { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); }
-        .theme-green { color: #16a34a; }
-        .bg-green-theme { background-color: #16a34a; color: #ffffff; }
-        .bg-green-theme:hover { background-color: #15803d; }
+        body { font-family: 'Inter', sans-serif; background-color: #ffffff !important; color: #111827 !important; }
+        .light-card { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .theme-green { color: #16a34a !important; }
+        .bg-green-theme { background-color: #16a34a !important; color: #ffffff !important; }
+        .bg-green-theme:hover { background-color: #15803d !important; }
         
         /* Slideshow CSS Styles */
         .mySlides { display: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
-        .mySlides.active { display: flex; animation: fadeIn 0.6s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0.2; } to { opacity: 1; } }
+        .mySlides.active { display: flex; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0.3; } to { opacity: 1; } }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col bg-white text-gray-900">
 
     <!-- Header / Navbar -->
-    <header class="border-b border-gray-200 bg-white sticky top-0 z-50 shadow-md px-6 py-4">
+    <header class="border-b border-gray-200 bg-white sticky top-0 z-50 shadow-sm px-6 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <!-- Logo & Brand Name (Extra Large Logo) -->
+            <!-- Logo & Brand Name (Very Large Logo) -->
             <div class="flex items-center gap-4">
-                <img src="images/logo.png" alt="SS Auto Care Logo" class="w-20 h-20 md:w-24 md:h-24 object-contain rounded-2xl border-2 border-green-600 bg-green-50 p-1.5 shadow-lg">
+                <img src="images/logo.png" alt="SS Auto Care Logo" class="w-24 h-24 md:w-28 md:h-28 object-contain rounded-2xl border-2 border-green-600 bg-green-50 p-2 shadow-md">
                 <div>
                     <h1 class="text-3xl md:text-4xl font-extrabold tracking-wider text-gray-900">
                         SS <span class="theme-green">AUTO CARE</span>
@@ -38,7 +38,7 @@
 
             <!-- Admin Login Button -->
             <div>
-                <a href="login.html" class="px-6 py-3 bg-green-theme font-bold rounded-xl shadow-md transition flex items-center gap-2 text-base">
+                <a href="login.html" class="px-6 py-3 bg-green-theme font-bold rounded-xl shadow transition flex items-center gap-2 text-base">
                     <i data-lucide="lock" class="w-5 h-5"></i> Admin Login
                 </a>
             </div>
@@ -53,7 +53,7 @@
             
             <!-- Left: Description & Specialization -->
             <div class="space-y-6">
-                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-100 border border-green-300 text-green-800 text-xs font-extrabold tracking-wider uppercase shadow-sm">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-100 border border-green-300 text-green-800 text-xs font-extrabold tracking-wider uppercase">
                     <i data-lucide="shield-check" class="w-4 h-4"></i> 30 Years of Trusted Excellence
                 </div>
                 <h2 class="text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-gray-900">
@@ -65,11 +65,11 @@
 
                 <!-- Key Highlights Badges -->
                 <div class="grid grid-cols-2 gap-3 pt-2">
-                    <div class="light-panel p-4 flex items-center gap-3 border-l-4 border-l-green-600 bg-white">
+                    <div class="light-card p-4 flex items-center gap-3 border-l-4 border-l-green-600 bg-white">
                         <i data-lucide="truck" class="w-6 h-6 theme-green"></i>
                         <span class="text-sm font-bold text-gray-900">4W Hydraulic Tippers</span>
                     </div>
-                    <div class="light-panel p-4 flex items-center gap-3 border-l-4 border-l-green-600 bg-white">
+                    <div class="light-card p-4 flex items-center gap-3 border-l-4 border-l-green-600 bg-white">
                         <i data-lucide="box" class="w-6 h-6 theme-green"></i>
                         <span class="text-sm font-bold text-gray-900">Open Bodies & Tanks</span>
                     </div>
@@ -77,13 +77,13 @@
             </div>
 
             <!-- Right: Gallery Slideshow Box with Controls -->
-            <div class="light-panel p-4 relative overflow-hidden h-[380px] lg:h-[420px] flex flex-col items-center justify-center bg-gray-900 shadow-xl">
+            <div class="light-card p-4 relative overflow-hidden h-[380px] lg:h-[420px] flex flex-col items-center justify-center bg-gray-100 shadow-xl">
                 
                 <div class="relative w-full h-full rounded-xl overflow-hidden bg-black">
                     
                     <!-- Slide 1: Logo Showcase -->
                     <div class="mySlides active flex flex-col items-center justify-center p-6 text-center bg-white">
-                        <img src="images/logo.png" alt="Logo Slide" class="w-36 h-36 object-contain mb-4 p-2 bg-green-50 rounded-2xl border-2 border-green-500 shadow-md">
+                        <img src="images/logo.png" alt="Logo Slide" class="w-40 h-40 object-contain mb-4 p-2 bg-green-50 rounded-2xl border-2 border-green-500 shadow-md">
                         <h3 class="text-2xl font-extrabold text-gray-900">SS Auto Care - Salem</h3>
                         <p class="text-gray-700 font-semibold text-sm mt-1">Trusted Commercial Vehicle Fabrication</p>
                     </div>
@@ -142,7 +142,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Service 1 -->
-                <div class="light-panel p-6 space-y-3 hover:border-green-600 transition bg-white">
+                <div class="light-card p-6 space-y-3 hover:border-green-600 transition bg-white">
                     <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-green-700">
                         <i data-lucide="truck" class="w-6 h-6"></i>
                     </div>
@@ -150,7 +150,7 @@
                     <p class="text-sm text-gray-700 font-medium">Custom built hydraulic tipper bodies engineered for maximum payload and strength.</p>
                 </div>
                 <!-- Service 2 -->
-                <div class="light-panel p-6 space-y-3 hover:border-green-600 transition bg-white">
+                <div class="light-card p-6 space-y-3 hover:border-green-600 transition bg-white">
                     <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-green-700">
                         <i data-lucide="layout" class="w-6 h-6"></i>
                     </div>
@@ -158,7 +158,7 @@
                     <p class="text-sm text-gray-700 font-medium">Durable open body structures built with high-grade channels and sheets.</p>
                 </div>
                 <!-- Service 3 -->
-                <div class="light-panel p-6 space-y-3 hover:border-green-600 transition bg-white">
+                <div class="light-card p-6 space-y-3 hover:border-green-600 transition bg-white">
                     <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-green-700">
                         <i data-lucide="database" class="w-6 h-6"></i>
                     </div>
@@ -166,7 +166,7 @@
                     <p class="text-sm text-gray-700 font-medium">Precision welded water transport tanks designed for long-term leakage resistance.</p>
                 </div>
                 <!-- Service 4 -->
-                <div class="light-panel p-6 space-y-3 hover:border-green-600 transition bg-white">
+                <div class="light-card p-6 space-y-3 hover:border-green-600 transition bg-white">
                     <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-green-700">
                         <i data-lucide="box" class="w-6 h-6"></i>
                     </div>
@@ -174,7 +174,7 @@
                     <p class="text-sm text-gray-700 font-medium">Secure freight containers and aerodynamically styled hi-tech commercial bodies.</p>
                 </div>
                 <!-- Service 5 -->
-                <div class="light-panel p-6 space-y-3 hover:border-green-600 transition bg-white">
+                <div class="light-card p-6 space-y-3 hover:border-green-600 transition bg-white">
                     <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-green-700">
                         <i data-lucide="wrench" class="w-6 h-6"></i>
                     </div>
@@ -182,7 +182,7 @@
                     <p class="text-sm text-gray-700 font-medium">Expert metal alignment, dent removal, and structural reinforcement.</p>
                 </div>
                 <!-- Service 6 -->
-                <div class="light-panel p-6 space-y-3 hover:border-green-600 transition bg-white">
+                <div class="light-card p-6 space-y-3 hover:border-green-600 transition bg-white">
                     <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-green-700">
                         <i data-lucide="palette" class="w-6 h-6"></i>
                     </div>
@@ -195,7 +195,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-gray-300 bg-white py-6 text-center text-sm font-semibold text-gray-600">
+    <footer class="border-t border-gray-200 bg-white py-6 text-center text-sm font-semibold text-gray-600">
         <p>&copy; 2026 SS Auto Care, Salem. All Rights Reserved. | Admin Portal Access</p>
     </footer>
 
@@ -214,7 +214,7 @@
             slideIndex++;
             if (slideIndex > slides.length) { slideIndex = 1; }
             slides[slideIndex - 1].classList.add("active");
-            slideTimer = setTimeout(showSlides, 3500); // Change image every 3.5 seconds
+            slideTimer = setTimeout(showSlides, 3500);
         }
 
         function plusSlides(n) {
@@ -229,7 +229,6 @@
             slideTimer = setTimeout(showSlides, 3500);
         }
 
-        // Initialize slideshow
         showSlides();
     </script>
 </body>
