@@ -8,11 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0b0f0e; color: #ffffff; }
-        .glass-panel { background: rgba(18, 28, 24, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: 1rem; }
-        .theme-green { color: #22c55e; }
-        .bg-green-theme { background-color: #22c55e; }
-        .bg-green-theme:hover { background-color: #16a34a; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
+        .light-panel { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .theme-green { color: #16a34a; }
+        .bg-green-theme { background-color: #16a34a; color: #ffffff; }
+        .bg-green-theme:hover { background-color: #15803d; }
         
         /* Slideshow CSS Styles */
         .mySlides { display: none; }
@@ -23,22 +23,22 @@
 <body class="min-h-screen flex flex-col">
 
     <!-- Header / Navbar -->
-    <header class="border-b border-green-500/20 bg-[#0b0f0e]/90 sticky top-0 z-50 backdrop-blur-md px-6 py-4">
+    <header class="border-b border-gray-200 bg-white/90 sticky top-0 z-50 backdrop-blur-md px-6 py-4 shadow-sm">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <!-- Logo & Brand Name -->
-            <div class="flex items-center gap-3">
-                <img src="images/logo.png" alt="SS Auto Care Logo" class="w-12 h-12 object-contain rounded-xl border border-green-500/40 bg-green-500/10 p-1 shadow-lg shadow-green-500/10">
+            <!-- Logo & Brand Name (Larger Logo) -->
+            <div class="flex items-center gap-4">
+                <img src="images/logo.png" alt="SS Auto Care Logo" class="w-16 h-16 md:w-20 md:h-20 object-contain rounded-2xl border-2 border-green-500/40 bg-green-50 p-1.5 shadow-md">
                 <div>
-                    <h1 class="text-2xl font-extrabold tracking-wider text-white">
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-wider text-gray-900">
                         SS <span class="theme-green">AUTO CARE</span>
                     </h1>
-                    <p class="text-xs text-gray-400 uppercase tracking-widest font-medium">Salem, Tamil Nadu</p>
+                    <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold">Salem, Tamil Nadu</p>
                 </div>
             </div>
 
             <!-- Admin Login Button -->
             <div>
-                <a href="login.html" class="px-5 py-2.5 bg-green-theme text-black font-bold rounded-xl shadow-lg shadow-green-500/20 transition flex items-center gap-2">
+                <a href="login.html" class="px-5 py-2.5 bg-green-theme font-bold rounded-xl shadow-md transition flex items-center gap-2">
                     <i data-lucide="lock" class="w-4 h-4"></i> Admin Login
                 </a>
             </div>
@@ -53,45 +53,45 @@
             
             <!-- Left: Description & Specialization -->
             <div class="space-y-6">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-semibold tracking-wider uppercase">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 border border-green-200 text-green-700 text-xs font-bold tracking-wider uppercase">
                     <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> 30 Years of Trusted Excellence
                 </div>
-                <h2 class="text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+                <h2 class="text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-gray-900">
                     Commercial Vehicle <span class="theme-green">Body Building & Fabrication</span>
                 </h2>
-                <p class="text-gray-300 text-lg leading-relaxed">
+                <p class="text-gray-600 text-lg leading-relaxed">
                     We specialize in high-end structural fabrication and custom commercial vehicle solutions in Salem. Built for heavy-duty durability and flawless finish.
                 </p>
 
                 <!-- Key Highlights Badges -->
                 <div class="grid grid-cols-2 gap-3 pt-2">
-                    <div class="glass-panel p-3 flex items-center gap-3 border-l-4 border-l-green-500">
+                    <div class="light-panel p-3 flex items-center gap-3 border-l-4 border-l-green-600">
                         <i data-lucide="truck" class="w-5 h-5 theme-green"></i>
-                        <span class="text-sm font-semibold">4W Hydraulic Tippers</span>
+                        <span class="text-sm font-semibold text-gray-800">4W Hydraulic Tippers</span>
                     </div>
-                    <div class="glass-panel p-3 flex items-center gap-3 border-l-4 border-l-green-500">
+                    <div class="light-panel p-3 flex items-center gap-3 border-l-4 border-l-green-600">
                         <i data-lucide="box" class="w-5 h-5 theme-green"></i>
-                        <span class="text-sm font-semibold">Open Bodies & Tanks</span>
+                        <span class="text-sm font-semibold text-gray-800">Open Bodies & Tanks</span>
                     </div>
                 </div>
             </div>
 
             <!-- Right: Gallery Slideshow Box with Controls -->
-            <div class="glass-panel p-4 relative overflow-hidden shadow-2xl h-[380px] lg:h-[420px] flex flex-col items-center justify-center">
+            <div class="light-panel p-4 relative overflow-hidden h-[380px] lg:h-[420px] flex flex-col items-center justify-center">
                 
-                <div class="relative w-full h-full rounded-xl overflow-hidden bg-[#070b09] border border-green-500/20">
+                <div class="relative w-full h-full rounded-xl overflow-hidden bg-gray-900 border border-gray-200">
                     
                     <!-- Slide 1: Logo / Brand Showcase -->
-                    <div class="mySlides active absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-                        <img src="images/logo.png" alt="Logo Slide" class="w-28 h-28 object-contain mb-4 p-2 bg-green-500/10 rounded-2xl border border-green-500/30">
-                        <h3 class="text-xl font-bold text-white">SS Auto Care - Salem</h3>
-                        <p class="text-gray-400 text-sm mt-1">Trusted Commercial Vehicle Fabrication</p>
+                    <div class="mySlides active absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-white">
+                        <img src="images/logo.png" alt="Logo Slide" class="w-32 h-32 object-contain mb-4 p-2 bg-green-50 rounded-2xl border border-green-200 shadow-md">
+                        <h3 class="text-xl font-bold text-gray-900">SS Auto Care - Salem</h3>
+                        <p class="text-gray-600 text-sm mt-1">Trusted Commercial Vehicle Fabrication</p>
                     </div>
 
                     <!-- Slide 2: Tipper 1 -->
                     <div class="mySlides absolute inset-0 flex flex-col items-center justify-center">
                         <img src="images/tipper1.webp" alt="Hydraulic Tipper" class="w-full h-full object-cover">
-                        <div class="absolute bottom-0 inset-x-0 bg-black/70 backdrop-blur-sm p-3 border-t border-green-500/20 text-center">
+                        <div class="absolute bottom-0 inset-x-0 bg-black/70 backdrop-blur-sm p-3 border-t border-gray-700 text-center">
                             <h3 class="text-base font-bold text-white">4W Hydraulic Tipper Specialist</h3>
                         </div>
                     </div>
@@ -99,7 +99,7 @@
                     <!-- Slide 3: Tipper 2 -->
                     <div class="mySlides absolute inset-0 flex flex-col items-center justify-center">
                         <img src="images/tipper 2.webp" alt="Tipper Fabrication" class="w-full h-full object-cover">
-                        <div class="absolute bottom-0 inset-x-0 bg-black/70 backdrop-blur-sm p-3 border-t border-green-500/20 text-center">
+                        <div class="absolute bottom-0 inset-x-0 bg-black/70 backdrop-blur-sm p-3 border-t border-gray-700 text-center">
                             <h3 class="text-base font-bold text-white">Custom Commercial Vehicle Bodies</h3>
                         </div>
                     </div>
@@ -107,7 +107,7 @@
                     <!-- Slide 4: Tipper 3 -->
                     <div class="mySlides absolute inset-0 flex flex-col items-center justify-center">
                         <img src="images/tipper 3.webp" alt="Workshop Fabrication" class="w-full h-full object-cover">
-                        <div class="absolute bottom-0 inset-x-0 bg-black/70 backdrop-blur-sm p-3 border-t border-green-500/20 text-center">
+                        <div class="absolute bottom-0 inset-x-0 bg-black/70 backdrop-blur-sm p-3 border-t border-gray-700 text-center">
                             <h3 class="text-base font-bold text-white">Precision Structural Fabrication</h3>
                         </div>
                     </div>
@@ -115,16 +115,16 @@
                     <!-- Slide 5: Hi-Tech Body -->
                     <div class="mySlides absolute inset-0 flex flex-col items-center justify-center">
                         <img src="images/hi-tech1.webp" alt="Hi-Tech Body" class="w-full h-full object-cover">
-                        <div class="absolute bottom-0 inset-x-0 bg-black/70 backdrop-blur-sm p-3 border-t border-green-500/20 text-center">
+                        <div class="absolute bottom-0 inset-x-0 bg-black/70 backdrop-blur-sm p-3 border-t border-gray-700 text-center">
                             <h3 class="text-base font-bold text-white">Hi-Tech & Aerodynamic Bodies</h3>
                         </div>
                     </div>
 
                     <!-- Previous & Next Buttons -->
-                    <button onclick="plusSlides(-1)" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-green-600 text-white p-2 rounded-full border border-green-500/40 transition">
+                    <button onclick="plusSlides(-1)" class="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-green-600 hover:text-white text-gray-800 p-2 rounded-full border border-gray-300 transition shadow">
                         <i data-lucide="chevron-left" class="w-5 h-5"></i>
                     </button>
-                    <button onclick="plusSlides(1)" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-green-600 text-white p-2 rounded-full border border-green-500/40 transition">
+                    <button onclick="plusSlides(1)" class="absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-green-600 hover:text-white text-gray-800 p-2 rounded-full border border-gray-300 transition shadow">
                         <i data-lucide="chevron-right" class="w-5 h-5"></i>
                     </button>
 
@@ -136,58 +136,58 @@
         <!-- Comprehensive Services Grid -->
         <div class="space-y-6 pt-6">
             <div class="text-center max-w-2xl mx-auto space-y-2">
-                <h3 class="text-2xl font-bold tracking-tight">Our Core Services & Specialization</h3>
-                <p class="text-gray-400 text-sm">Complete end-to-end commercial vehicle fabrication and maintenance under one roof.</p>
+                <h3 class="text-2xl font-extrabold tracking-tight text-gray-900">Our Core Services & Specialization</h3>
+                <p class="text-gray-600 text-sm">Complete end-to-end commercial vehicle fabrication and maintenance under one roof.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Service 1 -->
-                <div class="glass-panel p-6 space-y-3 hover:border-green-500/50 transition">
-                    <div class="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center text-green-400">
+                <div class="light-panel p-6 space-y-3 hover:border-green-500 transition">
+                    <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center text-green-600">
                         <i data-lucide="truck"></i>
                     </div>
-                    <h4 class="font-bold text-lg">4W Hydraulic Tippers</h4>
-                    <p class="text-sm text-gray-400">Custom built hydraulic tipper bodies engineered for maximum payload and strength.</p>
+                    <h4 class="font-bold text-lg text-gray-900">4W Hydraulic Tippers</h4>
+                    <p class="text-sm text-gray-600">Custom built hydraulic tipper bodies engineered for maximum payload and strength.</p>
                 </div>
                 <!-- Service 2 -->
-                <div class="glass-panel p-6 space-y-3 hover:border-green-500/50 transition">
-                    <div class="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center text-green-400">
+                <div class="light-panel p-6 space-y-3 hover:border-green-500 transition">
+                    <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center text-green-600">
                         <i data-lucide="layout"></i>
                     </div>
-                    <h4 class="font-bold text-lg">Open Bodies</h4>
-                    <p class="text-sm text-gray-400">Durable open body structures built with high-grade channels and sheets.</p>
+                    <h4 class="font-bold text-lg text-gray-900">Open Bodies</h4>
+                    <p class="text-sm text-gray-600">Durable open body structures built with high-grade channels and sheets.</p>
                 </div>
                 <!-- Service 3 -->
-                <div class="glass-panel p-6 space-y-3 hover:border-green-500/50 transition">
-                    <div class="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center text-green-400">
+                <div class="light-panel p-6 space-y-3 hover:border-green-500 transition">
+                    <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center text-green-600">
                         <i data-lucide="database"></i>
                     </div>
-                    <h4 class="font-bold text-lg">Water Tanks</h4>
-                    <p class="text-sm text-gray-400">Precision welded water transport tanks designed for long-term leakage resistance.</p>
+                    <h4 class="font-bold text-lg text-gray-900">Water Tanks</h4>
+                    <p class="text-sm text-gray-600">Precision welded water transport tanks designed for long-term leakage resistance.</p>
                 </div>
                 <!-- Service 4 -->
-                <div class="glass-panel p-6 space-y-3 hover:border-green-500/50 transition">
-                    <div class="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center text-green-400">
+                <div class="light-panel p-6 space-y-3 hover:border-green-500 transition">
+                    <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center text-green-600">
                         <i data-lucide="box"></i>
                     </div>
-                    <h4 class="font-bold text-lg">Containers & Hi-Tech Body</h4>
-                    <p class="text-sm text-gray-400">Secure freight containers and aerodynamically styled hi-tech commercial bodies.</p>
+                    <h4 class="font-bold text-lg text-gray-900">Containers & Hi-Tech Body</h4>
+                    <p class="text-sm text-gray-600">Secure freight containers and aerodynamically styled hi-tech commercial bodies.</p>
                 </div>
                 <!-- Service 5 -->
-                <div class="glass-panel p-6 space-y-3 hover:border-green-500/50 transition">
-                    <div class="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center text-green-400">
+                <div class="light-panel p-6 space-y-3 hover:border-green-500 transition">
+                    <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center text-green-600">
                         <i data-lucide="wrench"></i>
                     </div>
-                    <h4 class="font-bold text-lg">Tinkering Works</h4>
-                    <p class="text-sm text-gray-400">Expert metal alignment, dent removal, and structural reinforcement.</p>
+                    <h4 class="font-bold text-lg text-gray-900">Tinkering Works</h4>
+                    <p class="text-sm text-gray-600">Expert metal alignment, dent removal, and structural reinforcement.</p>
                 </div>
                 <!-- Service 6 -->
-                <div class="glass-panel p-6 space-y-3 hover:border-green-500/50 transition">
-                    <div class="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center text-green-400">
+                <div class="light-panel p-6 space-y-3 hover:border-green-500 transition">
+                    <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center text-green-600">
                         <i data-lucide="palette"></i>
                     </div>
-                    <h4 class="font-bold text-lg">Painting</h4>
-                    <p class="text-sm text-gray-400">High-gloss compressor spray painting with rust-proof anti-corrosive priming.</p>
+                    <h4 class="font-bold text-lg text-gray-900">Painting</h4>
+                    <p class="text-sm text-gray-600">High-gloss compressor spray painting with rust-proof anti-corrosive priming.</p>
                 </div>
             </div>
         </div>
@@ -195,7 +195,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-green-500/20 bg-[#070b09] py-6 text-center text-xs text-gray-400">
+    <footer class="border-t border-gray-200 bg-white py-6 text-center text-xs text-gray-500">
         <p>&copy; 2026 SS Auto Care, Salem. All Rights Reserved. | Admin Portal Access</p>
     </footer>
 
