@@ -13,10 +13,6 @@
         .theme-green { color: #16a34a !important; }
         .bg-green-theme { background-color: #16a34a !important; color: #ffffff !important; }
         .bg-green-theme:hover { background-color: #15803d !important; }
-        
-        /* Fixed Slideshow CSS */
-        .slide-item { display: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
-        .slide-item.active { display: flex; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col bg-white text-gray-900">
@@ -24,7 +20,7 @@
     <!-- Header / Navbar -->
     <header class="border-b border-gray-200 bg-white sticky top-0 z-50 shadow-sm px-6 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <!-- Logo & Brand Name (Extra Large & Perfect Round) -->
+            <!-- Logo & Brand Name -->
             <div class="flex items-center gap-4">
                 <img src="images/logo.png" alt="SS Auto Care Logo" class="w-24 h-24 md:w-28 md:h-28 object-cover rounded-full border-4 border-green-600 bg-green-50 p-1 shadow-lg">
                 <div>
@@ -75,48 +71,16 @@
                 </div>
             </div>
 
-            <!-- Right: Gallery Slideshow Box with Controls -->
+            <!-- Right: Dynamic Gallery Slideshow Box -->
             <div class="light-card p-4 relative overflow-hidden h-[380px] lg:h-[420px] flex flex-col items-center justify-center bg-gray-100 shadow-xl">
-                
-                <div class="relative w-full h-full rounded-xl overflow-hidden bg-black" id="slideshow-container">
+                <div class="relative w-full h-full rounded-xl overflow-hidden bg-black flex items-center justify-center" id="slideshow-container">
                     
-                    <!-- Slide 1: Logo Showcase -->
-                    <div class="slide-item active flex-col items-center justify-center p-6 text-center bg-white">
-                        <img src="images/logo.png" alt="Logo Slide" class="w-36 h-36 object-cover rounded-full mb-4 p-1 bg-green-50 border-4 border-green-500 shadow-md">
-                        <h3 class="text-2xl font-extrabold text-gray-900">SS Auto Care - Salem</h3>
-                        <p class="text-gray-700 font-semibold text-sm mt-1">Trusted Commercial Vehicle Fabrication</p>
-                    </div>
-
-                    <!-- Slide 2: Tipper 1 -->
-                    <div class="slide-item flex-col items-center justify-center">
-                        <img src="images/tipper1.webp" alt="Hydraulic Tipper" class="w-full h-full object-cover">
-                        <div class="absolute bottom-0 inset-x-0 bg-black/80 backdrop-blur-sm p-4 border-t border-green-500/30 text-center">
-                            <h3 class="text-lg font-bold text-white">4W Hydraulic Tipper Specialist</h3>
-                        </div>
-                    </div>
-
-                    <!-- Slide 3: Tipper 2 -->
-                    <div class="slide-item flex-col items-center justify-center">
-                        <img src="images/tipper 2.webp" alt="Tipper Fabrication" class="w-full h-full object-cover">
-                        <div class="absolute bottom-0 inset-x-0 bg-black/80 backdrop-blur-sm p-4 border-t border-green-500/30 text-center">
-                            <h3 class="text-lg font-bold text-white">Custom Commercial Vehicle Bodies</h3>
-                        </div>
-                    </div>
-
-                    <!-- Slide 4: Tipper 3 -->
-                    <div class="slide-item flex-col items-center justify-center">
-                        <img src="images/tipper 3.webp" alt="Workshop Fabrication" class="w-full h-full object-cover">
-                        <div class="absolute bottom-0 inset-x-0 bg-black/80 backdrop-blur-sm p-4 border-t border-green-500/30 text-center">
-                            <h3 class="text-lg font-bold text-white">Precision Structural Fabrication</h3>
-                        </div>
-                    </div>
-
-                    <!-- Slide 5: Hi-Tech Body -->
-                    <div class="slide-item flex-col items-center justify-center">
-                        <img src="images/hi-tech1.webp" alt="Hi-Tech Body" class="w-full h-full object-cover">
-                        <div class="absolute bottom-0 inset-x-0 bg-black/80 backdrop-blur-sm p-4 border-t border-green-500/30 text-center">
-                            <h3 class="text-lg font-bold text-white">Hi-Tech & Aerodynamic Bodies</h3>
-                        </div>
+                    <!-- Dynamic Slide Image -->
+                    <img id="slide-img" src="images/logo.png" alt="SS Auto Care Slide" class="w-full h-full object-cover">
+                    
+                    <!-- Slide Caption -->
+                    <div class="absolute bottom-0 inset-x-0 bg-black/80 backdrop-blur-sm p-4 border-t border-green-500/30 text-center">
+                        <h3 id="slide-caption" class="text-lg font-bold text-white">SS Auto Care - Salem</h3>
                     </div>
 
                     <!-- Previous & Next Buttons -->
@@ -126,7 +90,6 @@
                     <button type="button" onclick="changeSlide(1)" class="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-green-600 hover:text-white text-gray-900 p-3 rounded-full border border-gray-300 transition shadow-lg z-20 cursor-pointer">
                         <i data-lucide="chevron-right" class="w-6 h-6"></i>
                     </button>
-
                 </div>
             </div>
 
@@ -235,32 +198,41 @@
         <p>&copy; 2026 SS Auto Care, Salem. All Rights Reserved. | Admin Portal Access</p>
     </footer>
 
-    <!-- Script for Slideshow & Icons -->
+    <!-- Script for Dynamic Slideshow & Icons -->
     <script>
         lucide.createIcons();
 
+        // உங்களது images ஃபோல்டரில் உள்ள அனைத்துப் புகைப்படங்களையும் இங்கே சேர்க்கலாம்
+        const slides = [
+            { src: "images/logo.png", title: "SS Auto Care - Salem - Trusted Commercial Vehicle Fabrication" },
+            { src: "images/tipper1.webp", title: "4W Hydraulic Tipper Specialist" },
+            { src: "images/tipper 2.webp", title: "Custom Commercial Vehicle Bodies" },
+            { src: "images/tipper 3.webp", title: "Precision Structural Fabrication" },
+            { src: "images/hi-tech1.webp", title: "Hi-Tech & Aerodynamic Bodies" }
+            // நீங்கள் புதிய புகைப்படங்களை அப்லோட் செய்தால், இங்கே கீழە சேர்த்துக்கொள்ளலாம்:
+            // { src: "images/PUTHIYA_PHOTO_NAME.webp", title: "Workshop Works" }
+        ];
+
         let currentIdx = 0;
-        const items = document.getElementsByClassName("slide-item");
         let autoPlay = setInterval(nextSlideInterval, 3500);
 
-        function showItem(index) {
-            if (index >= items.length) { currentIdx = 0; }
-            else if (index < 0) { currentIdx = items.length - 1; }
-            else { currentIdx = index; }
-
-            for (let i = 0; i < items.length; i++) {
-                items[i].classList.remove("active");
-            }
-            items[currentIdx].classList.add("active");
+        function updateSlide() {
+            const imgElement = document.getElementById("slide-img");
+            const captionElement = document.getElementById("slide-caption");
+            
+            imgElement.src = slides[currentIdx].src;
+            captionElement.textContent = slides[currentIdx].title;
         }
 
         function nextSlideInterval() {
-            showItem(currentIdx + 1);
+            currentIdx = (currentIdx + 1) % slides.length;
+            updateSlide();
         }
 
         function changeSlide(n) {
             clearInterval(autoPlay);
-            showItem(currentIdx + n);
+            currentIdx = (currentIdx + n + slides.length) % slides.length;
+            updateSlide();
             autoPlay = setInterval(nextSlideInterval, 3500);
         }
     </script>
